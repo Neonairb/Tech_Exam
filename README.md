@@ -5,7 +5,8 @@
 ## Bases
 - Comence creando la base del backend con la plantilla de ASP.NET Core Web API para utilizar .Net C#.
 - Continue con la base del frontend para lo que use Angular con CSS.
-- Termine creando la base de datos seguido a las tablas especificadas en el documento de empleados y movimientos.
+## Base de Datos
+- Cree los scrips que servirian para crear la base de datos y sus tablas deacuerdo a la estructura del documento.
 
 ## Backend
 - 
