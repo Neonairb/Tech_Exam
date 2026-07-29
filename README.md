@@ -14,6 +14,12 @@
 ## Backend
 - Agrege el paquete de SqlClient en el proyecto
 - Especifica el string de coneccion dentro del appsetting.json apuntando a localhost.
+- Fui creando en este orden a estructura del backend:
+    - Modelos
+    - Dtos
+    - Connection Factory
+    - Repositories
+- Configurar la injeccion de dependencias
 
 ## Creacion de la base de datos
 - Debido a ya contar con las caracteristicas de la base de datos cree una local de nombre EXAMEN con ayuda de SSMSS.
