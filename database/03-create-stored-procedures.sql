@@ -2,7 +2,7 @@ USE EXAMEN;
 GO
 
 -- Empleados
-CREATE PROCEDURE sp_Empleados_ObtenerTodos
+CREATE OR ALTER PROCEDURE sp_Empleados_ObtenerTodos
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -11,7 +11,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE sp_Empleados_ObtenerPorId
+CREATE OR ALTER PROCEDURE sp_Empleados_ObtenerPorId
     @IdEmpleado INT
 AS
 BEGIN
@@ -21,7 +21,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE sp_Empleados_Crear
+CREATE OR ALTER PROCEDURE sp_Empleados_Crear
     @IdEmpleado INT,
     @Nombre NVARCHAR(50)
 AS
@@ -37,19 +37,19 @@ BEGIN TRY
     END;
 
     IF EXISTS
-        (
-            SELECT 1
-            FROM dbo.Empleados
-            WHERE IdEmpleado = @IdEmpleado
-        )
-        BEGIN
-            THROW 50004, 'Ya existe un empleado con ese identificador.', 1;
-        END;
+    (
+        SELECT 1
+        FROM dbo.Empleados
+        WHERE IdEmpleado = @IdEmpleado
+    )
+    BEGIN
+        THROW 50004, 'Ya existe un empleado con ese identificador.', 1;
+    END;
 
     IF NULLIF(LTRIM(RTRIM(@Nombre)), '') IS NULL
-        BEGIN
-            THROW 50003, 'El nombre del empleado es obligatorio.', 1;
-        END;
+    BEGIN
+        THROW 50003, 'El nombre del empleado es obligatorio.', 1;
+    END;
 
     INSERT INTO Empleados (
         IdEmpleado, 
@@ -79,7 +79,7 @@ BEGIN CATCH
 END CATCH;
 GO
 
-CREATE PROCEDURE sp_Empleados_Actualizar
+CREATE OR ALTER PROCEDURE sp_Empleados_Actualizar
     @IdEmpleado INT,
     @Nombre NVARCHAR(50)
 AS
@@ -90,9 +90,9 @@ BEGIN TRY
     BEGIN TRANSACTION;
 
     IF NULLIF(LTRIM(RTRIM(@Nombre)), '') IS NULL
-        BEGIN
-            THROW 50003, 'El nombre del empleado es obligatorio.', 1;
-        END;
+    BEGIN
+        THROW 50003, 'El nombre del empleado es obligatorio.', 1;
+    END;
 
     UPDATE Empleados
     SET Nombre = @Nombre,
@@ -100,9 +100,9 @@ BEGIN TRY
     WHERE IdEmpleado = @IdEmpleado;
 
     IF @@ROWCOUNT = 0
-        BEGIN
-            THROW 50001, 'El empleado no existe.', 1;
-        END;
+    BEGIN
+        THROW 50001, 'El empleado no existe.', 1;
+    END;
 
     INSERT INTO Movimientos (
         IdEmpleado,
@@ -123,7 +123,7 @@ BEGIN CATCH
 END CATCH;
 GO
 
-CREATE PROCEDURE sp_Empleados_DarDeBaja
+CREATE OR ALTER PROCEDURE sp_Empleados_DarDeBaja
     @IdEmpleado INT
 AS
 BEGIN TRY
@@ -132,25 +132,26 @@ BEGIN TRY
 
     BEGIN TRANSACTION;
 
+    IF EXISTS
+    (
+        SELECT 1
+        FROM dbo.Empleados
+        WHERE IdEmpleado = @IdEmpleado
+        AND Activo = 0
+    )
+    BEGIN
+        THROW 50005, 'El empleado ya se encuentra dado de baja.', 1;
+    END;
+
     UPDATE Empleados
     SET Activo = 0,
         FechaModificacion = SYSDATETIME()
     WHERE IdEmpleado = @IdEmpleado;
 
     IF @@ROWCOUNT = 0
-        BEGIN
-            THROW 50002, 'El empleado no existe.', 1;
-        END;
-    IF EXISTS
-        (
-            SELECT 1
-            FROM dbo.Empleados
-            WHERE IdEmpleado = @IdEmpleado
-            AND Activo = 0
-        )
-        BEGIN
-            THROW 50005, 'El empleado ya se encuentra dado de baja.', 1;
-        END;
+    BEGIN
+        THROW 50002, 'El empleado no existe.', 1;
+    END;
 
     INSERT INTO Movimientos (
         IdEmpleado,
@@ -172,7 +173,7 @@ END CATCH;
 GO
 
 -- Movimientos
-CREATE PROCEDURE sp_Movimientos_ObtenerTodos
+CREATE OR ALTER PROCEDURE sp_Movimientos_ObtenerTodos
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -181,7 +182,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE sp_Movimientos_ObtenerPorId
+CREATE OR ALTER PROCEDURE sp_Movimientos_ObtenerPorId
     @IdMovimiento INT
 AS
 BEGIN
@@ -191,7 +192,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE sp_Movimientos_ObtenerPorEmpleado
+CREATE OR ALTER PROCEDURE sp_Movimientos_ObtenerPorEmpleado
     @IdEmpleado INT
 AS
 BEGIN
@@ -203,7 +204,7 @@ END;
 GO
 
 -- Depurado
-CREATE PROCEDURE sp_DepuracionEmpleados 
+CREATE OR ALTER PROCEDURE sp_DepuracionEmpleados 
 AS
 BEGIN TRY
     SET NOCOUNT ON;

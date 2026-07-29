@@ -28,4 +28,5 @@ CREATE TABLE Movimientos (
 
     CONSTRAINT CK_Tipo_Movimiento
         CHECK (TipoMovimiento IN ('Alta', 'Baja', 'Cambio'))
-)
+);
+GO

@@ -3,8 +3,6 @@ using TechExamBackend.Data;
 using System.Data;
 using TechExamBackend.Dtos;
 using TechExamBackend.Models;
-using TechExamBackend.Models;
-using Microsoft.Data.SqlClient;
 
 namespace TechExamBackend.Repositories
 {
