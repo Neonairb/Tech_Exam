@@ -32,62 +32,6 @@ namespace TechExamBackend.Repositories
                 "sp_Empleados_DarDeBaja";
         }
 
-        // Clase para ahorrar procedimiento de coneccion
-        private sealed class SqlCommandContext : IAsyncDisposable
-        {
-            public SqlConnection Connection { get; }
-            public SqlCommand Command { get; }
-            private SqlCommandContext(
-                SqlConnection connection,
-                SqlCommand command
-            )
-            {
-                Connection = connection;
-                Command = command;
-            }
-            public static async Task<SqlCommandContext> CreateAsync(
-                ISqlConnectionFactory connectionFactory,
-                string storedProcedure,
-                CancellationToken cancellationToken
-            )
-            {
-                var connection = connectionFactory.CreateConnection();
-
-                try
-                {
-                    var command = new SqlCommand(
-                        storedProcedure,
-                        connection
-                    )
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    };
-
-                    await connection.OpenAsync(cancellationToken);
-
-                    return new SqlCommandContext(connection, command);
-                }
-                catch
-                {
-                    await connection.DisposeAsync();
-                    throw;
-                }
-            }
-
-            public void AddParameter(
-                SqlParameter parameter
-            )
-            {
-                this.Command.Parameters.Add(parameter);
-            }
-
-            public async ValueTask DisposeAsync()
-            {
-                await this.Command.DisposeAsync();
-                await this.Connection.DisposeAsync();
-            }
-        }
-
         public async Task<IReadOnlyCollection<Empleado>> ObtenerTodosAsync(CancellationToken cancellationToken = default)
         {
             var empleados = new List<Empleado>();
