@@ -19,6 +19,7 @@
     - Dtos
     - Connection Factory
     - Repositories
+    - Controllers
 - Configurar la injeccion de dependencias
 
 ## Creacion de la base de datos
