@@ -11,6 +11,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
+builder.Services.AddScoped<IMovimientosRepository, MovimientosRepository>();
 
 var app = builder.Build();
 

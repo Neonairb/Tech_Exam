@@ -13,7 +13,7 @@ namespace TechExamBackend.Controllers
         private readonly IEmpleadoRepository _empleadoRepository;
 
         public EmpleadosController(
-        IEmpleadoRepository empleadoRepository
+            IEmpleadoRepository empleadoRepository
         )
         {
             _empleadoRepository = empleadoRepository;
