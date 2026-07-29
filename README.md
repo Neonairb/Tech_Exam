@@ -2,7 +2,7 @@
 
 
 # Proceso de creacion:
-## Bases
+## Bases del proyecto
 - Comence creando la base del backend con la plantilla de ASP.NET Core Web API para utilizar .Net C#.
 - Continue con la base del frontend para lo que use Angular con CSS.
 ## Base de Datos
@@ -10,17 +10,16 @@
     - Tome en cuenta la 2 tablas existente y su relacion
     - Cree los stored procedures para las todas las acciones que se necesitaran en la API.
     - Termine creando el Job para la depuracion de usuario
-
 ## Backend
-- Agrege el paquete de SqlClient en el proyecto
-- Especifica el string de coneccion dentro del appsetting.json apuntando a localhost.
-- Fui creando en este orden a estructura del backend:
+- Agrege el paquete de SqlClient en el proyecto para hacer la coneccion con ADO.Net.
+- Especifique el string de coneccion dentro del appsetting.json apuntando a localhost.
+- La estructura del backend fue creada en este orden:
     - Modelos
     - Dtos
     - Connection Factory
     - Repositories
     - Controllers
-- Configurar la injeccion de dependencias
-
-## Creacion de la base de datos
-- Debido a ya contar con las caracteristicas de la base de datos cree una local de nombre EXAMEN con ayuda de SSMSS.
+- Configurar la injeccion de dependencias y cors para el front end
+- Los endpoins fueron testeados con la ayuda de swagger
+## Frontend
+- 
