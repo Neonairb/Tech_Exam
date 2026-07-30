@@ -42,11 +42,11 @@ namespace TechExamBackend.Controllers
                     mensaje = $"El tamaño de página debe estar entre 1 y 100."
                 });
             }
-            if (query?.Length > 50)
+            if (query?.Length > 20)
             {
                 return BadRequest(new
                 {
-                    mensaje = $"La búsqueda no puede tener mas de 50 catacteres."
+                    mensaje = $"La búsqueda no puede tener más de 20 caracteres."
                 });
             }
 

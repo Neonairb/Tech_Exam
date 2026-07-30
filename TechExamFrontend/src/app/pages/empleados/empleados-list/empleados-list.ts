@@ -54,8 +54,8 @@ export class EmpleadosList {
     this.searchChanges
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed())
       .subscribe((query) => {
-        if (query.length > 50) {
-          this.searchError.set('La búsqueda no puede tener más de 50 caracteres.');
+        if (query.length > 20) {
+          this.searchError.set('La búsqueda no puede tener más de 20 caracteres.');
           return;
         }
 
@@ -110,8 +110,8 @@ export class EmpleadosList {
     const query = (event.target as HTMLInputElement).value;
     this.searchQuery.set(query);
 
-    if (query.length > 50) {
-      this.searchError.set('La búsqueda no puede tener más de 50 caracteres.');
+    if (query.length > 20) {
+      this.searchError.set('La búsqueda no puede tener más de 20 caracteres.');
     }
 
     this.searchChanges.next(query);

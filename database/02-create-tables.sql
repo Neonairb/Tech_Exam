@@ -11,7 +11,7 @@ GO
 
 CREATE TABLE Empleados (
     IdEmpleado INT PRIMARY KEY,
-    Nombre NVARCHAR(50) NOT NULL,
+    Nombre NVARCHAR(20) NOT NULL,
     Activo BIT NOT NULL DEFAULT 1,
     FechaAlta  DATETIME2 DEFAULT SYSDATETIME(),
     FechaModificacion DATETIME2

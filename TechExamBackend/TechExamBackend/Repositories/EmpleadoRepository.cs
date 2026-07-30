@@ -63,7 +63,7 @@ namespace TechExamBackend.Repositories
             );
 
             context.AddParameter(
-                new SqlParameter("@Query", SqlDbType.NVarChar, 50)
+                new SqlParameter("@Query", SqlDbType.NVarChar, 20)
                 {
                     Value = query
                 }
@@ -149,7 +149,7 @@ namespace TechExamBackend.Repositories
             );
 
             context.AddParameter(
-                new SqlParameter("@Nombre", SqlDbType.NVarChar, 50)
+                new SqlParameter("@Nombre", SqlDbType.NVarChar, 20)
                 {
                     Value = request.Nombre.Trim()
                 }
@@ -183,7 +183,7 @@ namespace TechExamBackend.Repositories
             );
 
             context.AddParameter(
-                new SqlParameter("@Nombre", SqlDbType.NVarChar, 50)
+                new SqlParameter("@Nombre", SqlDbType.NVarChar, 20)
                 {
                     Value = request.Nombre.Trim()
                 }

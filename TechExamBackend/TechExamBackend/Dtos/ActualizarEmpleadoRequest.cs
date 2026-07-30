@@ -6,9 +6,9 @@ namespace TechExamBackend.Dtos
     {
         [Required(ErrorMessage = "El nombre es obligatorio.")]
         [StringLength(
-            50,
+            20,
             MinimumLength = 1,
-            ErrorMessage = "El nombre debe tener entre 1 y 50 caracteres."
+            ErrorMessage = "El nombre debe tener entre 1 y 20 caracteres."
         )]
         public string Nombre { get; set; } = string.Empty;
     }

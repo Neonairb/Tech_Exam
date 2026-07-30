@@ -77,8 +77,8 @@ export class EmpleadoModal {
 
     if (!nombre) {
       this.nameErrorMessage.set('El nombre es obligatorio.');
-    } else if (nombre.length > 50) {
-      this.nameErrorMessage.set('El nombre no puede exceder los 50 caracteres.');
+    } else if (nombre.length > 20) {
+      this.nameErrorMessage.set('El nombre no puede exceder los 20 caracteres.');
     }
 
     if (this.idErrorMessage() || this.nameErrorMessage() || this.isSaving()) {

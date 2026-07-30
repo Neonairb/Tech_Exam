@@ -32,3 +32,11 @@
     - Routes
     - Pantallas
 - Busque en internet por un diseno que me convenza para la aplicacion
+## Refinamiento
+- Una ves cree lo que buscaba como base funcional del programa me puse a agregar cosas que me di cuenta que faltaron como:
+    - Paginacion
+    - Nombre de empleado en movimientos
+    - Buscador
+    - Cantidad de empleados activos y dados de baja
+    - Filtros
+

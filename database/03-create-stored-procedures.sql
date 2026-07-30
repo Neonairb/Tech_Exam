@@ -5,7 +5,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_Empleados_ObtenerTodos
     @PageNumber INT = 1,
     @PageSize INT = 10,
-    @Query NVARCHAR(50) = NULL
+    @Query NVARCHAR(20) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -28,7 +28,7 @@ BEGIN
     FROM Empleados
     WHERE @Query IS NULL 
         OR Nombre LIKE '%' + @Query + '%' 
-        OR CAST(IdEmpleado AS NVARCHAR(50)) LIKE '%' + @Query + '%'
+        OR CAST(IdEmpleado AS NVARCHAR(20)) LIKE '%' + @Query + '%'
     ORDER BY IdEmpleado
     OFFSET @Offset ROWS
     FETCH NEXT @PageSize ROWS ONLY;
@@ -46,7 +46,7 @@ BEGIN
     FROM Empleados
     WHERE @Query IS NULL 
         OR Nombre LIKE '%' + @Query + '%' 
-        OR CAST(IdEmpleado AS NVARCHAR(50)) LIKE '%' + @Query + '%';
+        OR CAST(IdEmpleado AS NVARCHAR(20)) LIKE '%' + @Query + '%';
 END;
 GO
 
@@ -62,7 +62,7 @@ GO
 
 CREATE OR ALTER PROCEDURE sp_Empleados_Crear
     @IdEmpleado INT,
-    @Nombre NVARCHAR(50)
+    @Nombre NVARCHAR(20)
 AS
 BEGIN TRY
     SET NOCOUNT ON;
@@ -120,7 +120,7 @@ GO
 
 CREATE OR ALTER PROCEDURE sp_Empleados_Actualizar
     @IdEmpleado INT,
-    @Nombre NVARCHAR(50)
+    @Nombre NVARCHAR(20)
 AS
 BEGIN TRY
     SET NOCOUNT ON;
