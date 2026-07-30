@@ -32,6 +32,35 @@
   font-size: 0.85rem;
 }
 
+.employee-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.summary-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.summary-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.summary-active {
+  color: #72d39a;
+}
+
+.summary-inactive {
+  color: var(--app-text-muted);
+}
+
 .new-employee-button {
   display: inline-flex;
   align-items: center;
@@ -229,11 +258,11 @@
     align-items: center;
   }
 
-  .panel-header p {
-    display: none;
-  }
-
   .new-employee-button {
     padding-inline: 0.7rem;
+  }
+
+  .employee-summary {
+    gap: 0.55rem;
   }
 }

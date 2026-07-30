@@ -2,6 +2,16 @@
   <div class="panel-header">
     <div>
       <h2 id="employees-title">Empleados</h2>
+      <p class="employee-summary" aria-label="Resumen de empleados">
+        <span class="summary-item summary-active">
+          <span class="summary-dot" aria-hidden="true"></span>
+          {{ totalActive() }} activos
+        </span>
+        <span class="summary-item summary-inactive">
+          <span class="summary-dot" aria-hidden="true"></span>
+          {{ totalInactive() }} De baja
+        </span>
+      </p>
     </div>
     <button class="btn btn-primary new-employee-button" type="button" (click)="openCreateModal()">
       <span aria-hidden="true">+</span>

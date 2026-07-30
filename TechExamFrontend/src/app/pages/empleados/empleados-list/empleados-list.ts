@@ -26,6 +26,8 @@ export class EmpleadosList {
   readonly pageNumber = signal(1);
   readonly pageSize = 10;
   readonly totalRecords = signal(0);
+  readonly totalActive = signal(0);
+  readonly totalInactive = signal(0);
   readonly totalPages = computed(() =>
     Math.max(1, Math.ceil(this.totalRecords() / this.pageSize)),
   );
@@ -50,6 +52,8 @@ export class EmpleadosList {
       next: (resultado) => {
         this.empleados.set(resultado.datos);
         this.totalRecords.set(resultado.totalRegistros);
+        this.totalActive.set(resultado.totalActivos ?? 0);
+        this.totalInactive.set(resultado.totalInactivos ?? 0);
         this.isLoading.set(false);
       },
       error: (error: unknown) => {
