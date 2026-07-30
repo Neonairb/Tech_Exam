@@ -1,1 +1,26 @@
-<p>main-layout works!</p>
+<header class="header">
+  <div>
+    <h1>Gestión de empleados</h1>
+    <p>Examen técnico Full Stack</p>
+  </div>
+</header>
+
+<nav class="navigation">
+  <a
+    routerLink="/empleados"
+    routerLinkActive="active"
+  >
+    Gestión de empleados
+  </a>
+
+  <a
+    routerLink="/movimientos"
+    routerLinkActive="active"
+  >
+    Reporte de movimientos
+  </a>
+</nav>
+
+<main class="content">
+  <router-outlet />
+</main>
