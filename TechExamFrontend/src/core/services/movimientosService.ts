@@ -2,6 +2,8 @@
 import { inject, Service } from '@angular/core';
 import { environment } from '../../environments/environments';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Movimiento } from '../../app/models/movimiento.model';
 
 @Service()
 export class MovimientosService {
@@ -9,15 +11,15 @@ export class MovimientosService {
 
   	private readonly apiUrl = `${environment.apiUrl}/movimientos`; 
 
-	obtenerTodos() {
-		return this.http.get(this.apiUrl);
+	obtenerTodos(): Observable<Movimiento[]>  {
+		return this.http.get<Movimiento[]>(this.apiUrl);
 	}
 
-	obtenerPorId(idMovimiento: number) {
-		return this.http.get(`${this.apiUrl}/${idMovimiento}`);
+	obtenerPorId(idMovimiento: number): Observable<Movimiento> {
+		return this.http.get<Movimiento>(`${this.apiUrl}/${idMovimiento}`);
 	}
 
-	obtenerPorEmpleado(idEmpleado: number) {
-		return this.http.get(`${this.apiUrl}/empleado/${idEmpleado}`);
+	obtenerPorEmpleado(idEmpleado: number): Observable<Movimiento[]> {
+		return this.http.get<Movimiento[]>(`${this.apiUrl}/empleado/${idEmpleado}`);
 	}
 }

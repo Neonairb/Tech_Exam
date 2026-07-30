@@ -1,3 +1,57 @@
 <aside class="content-panel movements-panel" aria-labelledby="movements-title">
-  <h2 id="movements-title">Movimientos</h2>
+  <div class="panel-header">
+    <div>
+      <h2 id="movements-title">Movimientos</h2>
+      <p>Actividad reciente del personal.</p>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="screen-state" role="status">
+      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      Cargando movimientos...
+    </div>
+  } @else if (errorMessage()) {
+    <div class="screen-state screen-state-error" role="alert">
+      {{ errorMessage() }}
+    </div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th scope="col">Empleado</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (movimiento of movimientos(); track movimiento.idMovimiento) {
+            <tr>
+              <td class="empleado-id">#{{ movimiento.idEmpleado }}</td>
+              <td>
+                <span
+                  class="movement-type"
+                  [class.movement-type-alta]="movimiento.tipoMovimiento.toLowerCase() === 'alta'"
+                  [class.movement-type-cambio]="
+                    movimiento.tipoMovimiento.toLowerCase() === 'cambio'
+                  "
+                  [class.movement-type-baja]="movimiento.tipoMovimiento.toLowerCase() === 'baja'"
+                >
+                  {{ movimiento.tipoMovimiento }}
+                </span>
+              </td>
+              <td class="movement-date">
+                {{ movimiento.fechaMovimiento | date: 'dd/MM/yyyy' }}
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="3" class="empty-table">No hay movimientos disponibles.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </aside>

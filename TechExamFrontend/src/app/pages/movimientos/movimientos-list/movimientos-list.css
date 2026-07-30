@@ -6,21 +6,128 @@
 .content-panel {
   height: 100%;
   min-height: 360px;
-  padding: 1.25rem;
   overflow: hidden;
   background: var(--app-surface);
   border: 1px solid var(--app-border);
   border-radius: var(--app-radius);
 }
 
-.movements-panel h2 {
+.panel-header {
+  padding: 1.25rem 1.25rem 1rem;
+}
+
+.panel-header h2 {
   margin: 0;
   font-size: 1rem;
   font-weight: 650;
 }
 
+.panel-header p {
+  margin: 0.3rem 0 0;
+  color: var(--app-text-muted);
+  font-size: 0.85rem;
+}
+
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--app-text);
+  --bs-table-border-color: var(--app-border);
+  --bs-table-hover-bg: var(--app-surface-hover);
+  --bs-table-hover-color: var(--app-text);
+  min-width: 360px;
+  border-top: 1px solid var(--app-border);
+}
+
+.table thead th {
+  padding: 0.75rem 0.8rem;
+  background: color-mix(in srgb, var(--app-surface) 75%, var(--app-bg));
+  color: var(--app-text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.table tbody td {
+  padding: 0.85rem 0.8rem;
+  color: var(--app-text-muted);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.empleado-id {
+  color: var(--app-text) !important;
+  font-weight: 600;
+}
+
+.movement-type {
+  display: inline-flex;
+  align-items: center;
+  max-width: 110px;
+  padding: 0.28rem 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  background: var(--app-surface-hover);
+  color: var(--app-text-muted);
+  font-size: 0.7rem;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.movement-type-alta {
+  border-color: rgb(114 211 154 / 25%);
+  background: rgb(44 130 79 / 12%);
+  color: #72d39a;
+}
+
+.movement-type-cambio {
+  border-color: rgb(224 181 74 / 28%);
+  background: rgb(160 117 24 / 12%);
+  color: #e0b54a;
+}
+
+.movement-type-baja {
+  border-color: rgb(239 139 139 / 25%);
+  background: rgb(168 54 54 / 12%);
+  color: #ef8b8b;
+}
+
+.movement-date {
+  text-align: left;
+}
+
+.empty-table {
+  padding-block: 2.5rem !important;
+  text-align: center;
+  white-space: normal !important;
+}
+
+.screen-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  min-height: 180px;
+  border-top: 1px solid var(--app-border);
+  color: var(--app-text-muted);
+  font-size: 0.85rem;
+}
+
+.screen-state-error {
+  padding-inline: 1rem;
+  color: #ef8b8b;
+  text-align: center;
+}
+
 @media (max-width: 900px) {
   .content-panel {
     min-height: 140px;
+  }
+
+  .table {
+    min-width: 0;
   }
 }
