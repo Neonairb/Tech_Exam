@@ -30,3 +30,4 @@
     - Services
     - Routes
     - Pantallas
+- Busque en internet por un diseno que me convenza para la aplicacion

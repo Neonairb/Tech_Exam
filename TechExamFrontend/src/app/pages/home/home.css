@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(220px, 1fr);
+  align-items: stretch;
+  gap: 1rem;
+  width: 100%;
+}
+
+.home-grid > * {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+}

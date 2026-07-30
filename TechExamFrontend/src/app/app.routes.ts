@@ -3,6 +3,7 @@ import { MainLayout } from './layout/main-layout/main-layout';
 import { EmpleadosList } from './pages/empleados/empleados-list/empleados-list';
 import { EmpleadoForm } from './pages/empleados/empleado-form/empleado-form';
 import { MovimientosList } from './pages/movimientos/movimientos-list/movimientos-list';
+import { Home } from './pages/home/home';
 
 export const routes: Routes = [
     {
@@ -10,8 +11,8 @@ export const routes: Routes = [
         component: MainLayout,
         children: [
             {
-                path: 'empleados',
-                component: EmpleadosList
+                path: 'home',
+                component: Home
             },
             {
                 path: 'empleados/crear',
@@ -22,18 +23,14 @@ export const routes: Routes = [
                 component: EmpleadoForm
             },
             {
-                path: 'movimientos',
-                component: MovimientosList
-            },
-            {
                 path: '',
-                redirectTo: 'empleados',
+                redirectTo: 'home',
                 pathMatch: 'full'
             }
         ]
     },
     {
         path: '**',
-        redirectTo: 'empleados'
+        redirectTo: 'home'
     }
 ];

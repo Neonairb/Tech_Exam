@@ -1,33 +1,81 @@
-<div class="empleados-list">
-  <h2>Empleados</h2>
+<article class="content-panel employees-panel" aria-labelledby="employees-title">
+  <div class="panel-header">
+    <div>
+      <h2 id="employees-title">Empleados</h2>
+    </div>
+    <button class="btn btn-primary new-employee-button" type="button">
+      <span aria-hidden="true">+</span>
+      Nuevo
+    </button>
+  </div>
+
   @if (isLoading()) {
-    <p>Cargando empleados...</p>
+    <div class="screen-state" role="status">
+      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      Cargando empleados...
+    </div>
   } @else if (errorMessage()) {
-    <p>{{ errorMessage() }}</p>
+    <div class="screen-state screen-state-error" role="alert">
+      {{ errorMessage() }}
+    </div>
   } @else {
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Activo</th>
-          <th>Fecha de alta</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (empleado of empleados(); track empleado.idEmpleado) {
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
           <tr>
-            <td>{{ empleado.idEmpleado }}</td>
-            <td>{{ empleado.nombre }}</td>
-            <td>{{ empleado.activo }}</td>
-            <td>{{ empleado.fechaAlta | date: 'dd/MM/yyyy' }}</td>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Fecha de alta</th>
+            <th scope="col" class="text-end">Acciones</th>
           </tr>
-        } @empty {
-          <tr>
-            <td colspan="5">No hay empleados disponibles.</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (empleado of empleados(); track empleado.idEmpleado) {
+            <tr>
+              <td class="employee-id">#{{ empleado.idEmpleado }}</td>
+              <td class="employee-name">{{ empleado.nombre }}</td>
+              <td>
+                <span
+                  class="status-badge"
+                  [class.status-active]="empleado.activo"
+                  [class.status-inactive]="!empleado.activo"
+                >
+                  <span class="status-dot" aria-hidden="true"></span>
+                  {{ empleado.activo ? 'Activo' : 'Baja' }}
+                </span>
+              </td>
+              <td>{{ empleado.fechaAlta | date: 'dd/MM/yyyy' }}</td>
+              <td>
+                <div class="action-buttons">
+                  <button
+                    class="btn action-button"
+                    type="button"
+                    aria-label="Editar empleado"
+                    title="Editar"
+                  >
+                    ✎
+                  </button>
+                  @if (empleado.activo) {
+                    <button
+                      class="btn action-button action-button-danger"
+                      type="button"
+                      aria-label="Dar de baja al empleado"
+                      title="Dar de baja"
+                    >
+                      ⊘
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="empty-table">No hay empleados disponibles.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   }
-</div>
+</article>

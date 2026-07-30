@@ -56,6 +56,10 @@
   padding: 2rem;
 }
 
+.content:has(app-home) {
+  width: 100%;
+}
+
 @media (max-width: 640px) {
   .navigation {
     align-items: stretch;
