@@ -4,7 +4,8 @@ GO
 -- Empleados
 CREATE OR ALTER PROCEDURE sp_Empleados_ObtenerTodos
     @PageNumber INT = 1,
-    @PageSize INT = 10
+    @PageSize INT = 10,
+    @Query NVARCHAR(50) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -19,10 +20,15 @@ BEGIN
         THROW 50001, 'El tamaño de página debe estar entre 1 y 100.', 1;
     END;
 
+    SET @Query = NULLIF(LTRIM(RTRIM(@Query)), '');
+
     DECLARE @Offset INT = (@PageNumber - 1) * @PageSize;
 
     SELECT *
     FROM Empleados
+    WHERE @Query IS NULL 
+        OR Nombre LIKE '%' + @Query + '%' 
+        OR CAST(IdEmpleado AS NVARCHAR(50)) LIKE '%' + @Query + '%'
     ORDER BY IdEmpleado
     OFFSET @Offset ROWS
     FETCH NEXT @PageSize ROWS ONLY;
@@ -37,7 +43,10 @@ BEGIN
             SUM(CASE WHEN Activo = 0 THEN 1 ELSE 0 END),
             0
         ) AS TotalInactivos
-    FROM Empleados;
+    FROM Empleados
+    WHERE @Query IS NULL 
+        OR Nombre LIKE '%' + @Query + '%' 
+        OR CAST(IdEmpleado AS NVARCHAR(50)) LIKE '%' + @Query + '%';
 END;
 GO
 

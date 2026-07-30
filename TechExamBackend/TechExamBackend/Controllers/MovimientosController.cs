@@ -19,8 +19,8 @@ namespace TechExamBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<ResultadoPaginado<Movimiento>>> ObtenerTodos(
             CancellationToken cancellationToken,
-            int pageNumber = 1,
-            int pageSize = 10
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10
         )
         {
             if (pageNumber < 1)
@@ -66,8 +66,8 @@ namespace TechExamBackend.Controllers
         public async Task<ActionResult<IReadOnlyCollection<Movimiento>>> ObtenerPorEmpleado(
             CancellationToken cancellationToken,
             int idEmpleado,
-            int pageNumber = 1,
-            int pageSize = 10
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10
         )
         {
             if (pageNumber < 1)

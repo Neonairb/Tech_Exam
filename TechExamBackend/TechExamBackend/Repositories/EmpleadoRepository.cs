@@ -36,6 +36,7 @@ namespace TechExamBackend.Repositories
         public async Task<ResultadoPaginado<Empleado>> ObtenerTodosAsync(
             int pageNumber = 1,
             int pageSize = 10,
+            string? query = null,
             CancellationToken cancellationToken = default
         )
         {
@@ -58,6 +59,13 @@ namespace TechExamBackend.Repositories
                 new SqlParameter("@PageSize", SqlDbType.Int)
                 {
                     Value = pageSize
+                }
+            );
+
+            context.AddParameter(
+                new SqlParameter("@Query", SqlDbType.NVarChar, 50)
+                {
+                    Value = query
                 }
             );
 

@@ -9,6 +9,7 @@ namespace TechExamBackend.Repositories
         Task<ResultadoPaginado<Empleado>> ObtenerTodosAsync(
             int pageNumber = 1,
             int pageSize = 10,
+            string? query = null,
             CancellationToken cancellationToken = default
         );
 

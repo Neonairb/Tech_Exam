@@ -23,8 +23,9 @@ namespace TechExamBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<ResultadoPaginado<Empleado>>> ObtenerTodos(
             CancellationToken cancellationToken,
-            int pageNumber = 1,
-            int pageSize = 10
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? query = null
         )
         {
             if (pageNumber < 1)
@@ -41,8 +42,15 @@ namespace TechExamBackend.Controllers
                     mensaje = $"El tamaño de página debe estar entre 1 y 100."
                 });
             }
+            if (query?.Length > 50)
+            {
+                return BadRequest(new
+                {
+                    mensaje = $"La búsqueda no puede tener mas de 50 catacteres."
+                });
+            }
 
-            var resultadoPaginado = await _empleadoRepository.ObtenerTodosAsync(pageNumber, pageSize, cancellationToken);
+            var resultadoPaginado = await _empleadoRepository.ObtenerTodosAsync(pageNumber, pageSize, query, cancellationToken);
 
             return Ok(resultadoPaginado);
         }
