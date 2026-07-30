@@ -17,6 +17,7 @@ export class EmpleadosList implements OnInit {
   readonly isLoading = signal(true);
   readonly errorMessage = signal('');
   readonly isCreateModalOpen = signal(false);
+  readonly employeeToEdit = signal<Empleado | null>(null);
 
   ngOnInit() {
     this.cargarEmpleados();
@@ -48,6 +49,19 @@ export class EmpleadosList implements OnInit {
 
   employeeCreated(): void {
     this.closeCreateModal();
+    this.cargarEmpleados();
+  }
+
+  openEditModal(employee: Empleado): void {
+    this.employeeToEdit.set(employee);
+  }
+
+  closeEditModal(): void {
+    this.employeeToEdit.set(null);
+  }
+
+  employeeUpdated(): void {
+    this.closeEditModal();
     this.cargarEmpleados();
   }
 }

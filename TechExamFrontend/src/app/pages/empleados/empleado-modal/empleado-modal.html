@@ -7,7 +7,9 @@
   >
     <header class="modal-header">
       <div>
-        <h2 id="employee-modal-title">Agregar empleado</h2>
+        <h2 id="employee-modal-title">
+          {{ mode() === 'edit' ? 'Editar empleado' : 'Agregar empleado' }}
+        </h2>
       </div>
 
       <button
@@ -23,24 +25,27 @@
 
     <form novalidate (submit)="save($event)">
       <div class="modal-body">
-        <div class="form-field">
-          <label for="employee-id">ID de empleado</label>
-          <input
-            id="employee-id"
-            class="form-control"
-            type="number"
-            min="1"
-            placeholder="Ej. 101"
-            [value]="employeeId()"
-            (input)="updateEmployeeId($event)"
-            autofocus
-          />
-          @if (
-            hasAttemptedSubmit() && (!employeeId() || +employeeId() < 1 || +employeeId() % 1 !== 0)
-          ) {
-            <p class="field-error">Ingresa un ID válido mayor a cero.</p>
-          }
-        </div>
+        @if (mode() === 'create') {
+          <div class="form-field">
+            <label for="employee-id">ID de empleado</label>
+            <input
+              id="employee-id"
+              class="form-control"
+              type="number"
+              min="1"
+              placeholder="Ej. 101"
+              [value]="employeeId()"
+              (input)="updateEmployeeId($event)"
+              autofocus
+            />
+            @if (
+              hasAttemptedSubmit() &&
+              (!employeeId() || +employeeId() < 1 || +employeeId() % 1 !== 0)
+            ) {
+              <p class="field-error">Ingresa un ID válido mayor a cero.</p>
+            }
+          </div>
+        }
 
         <div class="form-field">
           <label for="employee-name">Nombre completo</label>
@@ -52,6 +57,7 @@
             placeholder="Nombre del empleado"
             [value]="employeeName()"
             (input)="updateEmployeeName($event)"
+            [autofocus]="mode() === 'edit'"
           />
           @if (hasAttemptedSubmit() && !employeeName().trim()) {
             <p class="field-error">El nombre es obligatorio.</p>
@@ -69,7 +75,7 @@
             <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
             Guardando...
           } @else {
-            Guardar empleado
+            {{ mode() === 'edit' ? 'Guardar cambios' : 'Guardar empleado' }}
           }
         </button>
       </footer>

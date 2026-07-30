@@ -53,6 +53,7 @@
                     type="button"
                     aria-label="Editar empleado"
                     title="Editar"
+                    (click)="openEditModal(empleado)"
                   >
                     ✎
                   </button>
@@ -82,4 +83,13 @@
 
 @if (isCreateModalOpen()) {
   <app-empleado-modal (closed)="closeCreateModal()" (saved)="employeeCreated()" />
+}
+
+@if (employeeToEdit(); as employee) {
+  <app-empleado-modal
+    mode="edit"
+    [employee]="employee"
+    (closed)="closeEditModal()"
+    (saved)="employeeUpdated()"
+  />
 }
