@@ -8,7 +8,7 @@ import { ActualizarEmpleadoRequest, CrearEmpleadoRequest, Empleado } from '../..
 export class EmpleadosService {
     private readonly http = inject(HttpClient);
 
-    private readonly apiUrl = `${environment.apiUrl}/empleados`;
+    private readonly apiUrl = `${environment.apiUrl}/Empleados`;
 
     obtenerTodos(): Observable<Empleado[]> {
         return this.http.get<Empleado[]>(this.apiUrl);

@@ -1,1 +1,11 @@
-<p>empleados-list works!</p>
+<h2>Empleados</h2>
+
+@if (isLoading) {
+  <p>Cargando empleados...</p>
+}
+
+@if (errorMessage) {
+  <p>{{ errorMessage }}</p>
+}
+
+<pre>{{ empleados | json }}</pre>
