@@ -33,16 +33,18 @@
               class="form-control"
               type="number"
               min="1"
+              step="1"
               placeholder="Ej. 101"
               [value]="employeeId()"
               (input)="updateEmployeeId($event)"
+              [attr.aria-invalid]="idErrorMessage() ? true : null"
+              [attr.aria-describedby]="idErrorMessage() ? 'employee-id-error' : null"
               autofocus
             />
-            @if (
-              hasAttemptedSubmit() &&
-              (!employeeId() || +employeeId() < 1 || +employeeId() % 1 !== 0)
-            ) {
-              <p class="field-error">Ingresa un ID válido mayor a cero.</p>
+            @if (idErrorMessage()) {
+              <p id="employee-id-error" class="field-error" role="alert">
+                {{ idErrorMessage() }}
+              </p>
             }
           </div>
         }
@@ -53,14 +55,17 @@
             id="employee-name"
             class="form-control"
             type="text"
-            maxlength="100"
             placeholder="Nombre del empleado"
             [value]="employeeName()"
             (input)="updateEmployeeName($event)"
+            [attr.aria-invalid]="nameErrorMessage() ? true : null"
+            [attr.aria-describedby]="nameErrorMessage() ? 'employee-name-error' : null"
             [autofocus]="mode() === 'edit'"
           />
-          @if (hasAttemptedSubmit() && !employeeName().trim()) {
-            <p class="field-error">El nombre es obligatorio.</p>
+          @if (nameErrorMessage()) {
+            <p id="employee-name-error" class="field-error" role="alert">
+              {{ nameErrorMessage() }}
+            </p>
           }
         </div>
 

@@ -2,6 +2,7 @@ import { Component, effect, inject, input, signal } from '@angular/core';
 import { MovimientosService } from '../../../../core/services/movimientosService';
 import { Movimiento } from '../../../models/movimiento.model';
 import { DatePipe } from '@angular/common';
+import { getApiErrorMessage } from '../../../../core/utils/api-error';
 
 @Component({
   selector: 'app-movimientos-list',
@@ -33,8 +34,10 @@ export class MovimientosList {
         this.movimientos.set(movimientos);
         this.isLoading.set(false);
       },
-      error: () => {
-        this.errorMessage.set('Error al cargar los movimientos');
+      error: (error: unknown) => {
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'No fue posible cargar los movimientos. Intenta nuevamente.'),
+        );
         this.isLoading.set(false);
       },
     });

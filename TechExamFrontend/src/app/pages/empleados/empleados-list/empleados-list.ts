@@ -3,6 +3,7 @@ import { EmpleadosService } from '../../../../core/services/empleadosService';
 import { Empleado } from '../../../models/empleado.model';
 import { DatePipe } from '@angular/common';
 import { EmpleadoModal } from '../empleado-modal/empleado-modal';
+import { getApiErrorMessage } from '../../../../core/utils/api-error';
 
 @Component({
   selector: 'app-empleados-list',
@@ -37,8 +38,10 @@ export class EmpleadosList {
         this.empleados.set(empleados);
         this.isLoading.set(false);
       },
-      error: () => {
-        this.errorMessage.set('Error al cargar los empleados');
+      error: (error: unknown) => {
+        this.errorMessage.set(
+          getApiErrorMessage(error, 'No fue posible cargar los empleados. Intenta nuevamente.'),
+        );
         this.isLoading.set(false);
       },
     });

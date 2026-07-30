@@ -1,6 +1,9 @@
 import { Component, effect, HostListener, inject, input, output, signal } from '@angular/core';
 import { EmpleadosService } from '../../../../core/services/empleadosService';
 import { Empleado } from '../../../models/empleado.model';
+import { HttpErrorResponse } from '@angular/common/http';
+import Swal from 'sweetalert2';
+import { getApiErrorMessage } from '../../../../core/utils/api-error';
 
 @Component({
   selector: 'app-empleado-modal',
@@ -16,9 +19,10 @@ export class EmpleadoModal {
   readonly saved = output<Empleado>();
   readonly isSaving = signal(false);
   readonly errorMessage = signal('');
+  readonly idErrorMessage = signal('');
+  readonly nameErrorMessage = signal('');
   readonly employeeId = signal('');
   readonly employeeName = signal('');
-  readonly hasAttemptedSubmit = signal(false);
 
   constructor() {
     effect(() => {
@@ -50,25 +54,34 @@ export class EmpleadoModal {
 
   updateEmployeeId(event: Event): void {
     this.employeeId.set((event.target as HTMLInputElement).value);
+    this.idErrorMessage.set('');
   }
 
   updateEmployeeName(event: Event): void {
     this.employeeName.set((event.target as HTMLInputElement).value);
+    this.nameErrorMessage.set('');
   }
 
   save(event: SubmitEvent): void {
     event.preventDefault();
-    this.hasAttemptedSubmit.set(true);
-
     const idEmpleado = Number(this.employeeId());
     const nombre = this.employeeName().trim();
     const isEditing = this.mode() === 'edit';
 
-    if (
-      (!isEditing && (!Number.isInteger(idEmpleado) || idEmpleado < 1)) ||
-      !nombre ||
-      this.isSaving()
-    ) {
+    this.idErrorMessage.set('');
+    this.nameErrorMessage.set('');
+
+    if (!isEditing && (!Number.isInteger(idEmpleado) || idEmpleado < 1)) {
+      this.idErrorMessage.set('El ID debe ser un número entero mayor que cero.');
+    }
+
+    if (!nombre) {
+      this.nameErrorMessage.set('El nombre es obligatorio.');
+    } else if (nombre.length > 50) {
+      this.nameErrorMessage.set('El nombre no puede exceder los 50 caracteres.');
+    }
+
+    if (this.idErrorMessage() || this.nameErrorMessage() || this.isSaving()) {
       return;
     }
 
@@ -83,12 +96,32 @@ export class EmpleadoModal {
       next: (employee) => {
         this.saved.emit(employee);
       },
-      error: () => {
-        this.errorMessage.set(
-          isEditing
-            ? 'No fue posible actualizar el empleado. Intenta nuevamente.'
-            : 'No fue posible guardar el empleado. Intenta nuevamente.',
-        );
+      error: (error: unknown) => {
+        const fallback = isEditing
+          ? 'No fue posible actualizar el empleado. Intenta nuevamente.'
+          : 'No fue posible guardar el empleado. Intenta nuevamente.';
+        const message = getApiErrorMessage(error, fallback);
+
+        if (error instanceof HttpErrorResponse && error.status === 400) {
+          this.idErrorMessage.set(getApiErrorMessage(error, '', 'IdEmpleado'));
+          this.nameErrorMessage.set(getApiErrorMessage(error, '', 'Nombre'));
+          this.errorMessage.set(
+            this.idErrorMessage() || this.nameErrorMessage() ? '' : message,
+          );
+        } else if (error instanceof HttpErrorResponse && error.status === 409 && !isEditing) {
+          this.idErrorMessage.set(message);
+        } else {
+          void Swal.fire({
+            icon: 'error',
+            title: 'No se pudo guardar',
+            text: message,
+            confirmButtonText: 'Entendido',
+            background: 'var(--app-surface)',
+            color: 'var(--app-text)',
+            confirmButtonColor: 'var(--app-accent)',
+          });
+        }
+
         this.isSaving.set(false);
       },
     });
