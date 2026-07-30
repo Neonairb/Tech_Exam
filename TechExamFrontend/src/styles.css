@@ -48,3 +48,67 @@ a:hover {
   outline: 2px solid var(--app-accent);
   outline-offset: 3px;
 }
+
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 58px;
+  padding: 0.7rem 1.25rem;
+  border-top: 1px solid var(--app-border);
+  color: var(--app-text-muted);
+  font-size: 0.78rem;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.pagination-button {
+  min-height: 2rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--app-border);
+  border-radius: 0.4rem;
+  background: transparent;
+  color: var(--app-text);
+  font: inherit;
+  transition:
+    border-color var(--app-transition),
+    background var(--app-transition);
+}
+
+.pagination-button:hover:not(:disabled) {
+  border-color: var(--app-accent);
+  background: var(--app-surface-hover);
+}
+
+.pagination-button:disabled {
+  color: var(--app-text-muted);
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.pagination-current {
+  min-width: 4.5rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+  .pagination-bar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .pagination-summary {
+    text-align: center;
+  }
+
+  .pagination-controls {
+    justify-content: space-between;
+  }
+}

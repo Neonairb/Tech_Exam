@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { MovimientosService } from '../../../../core/services/movimientosService';
 import { Movimiento } from '../../../models/movimiento.model';
 import { DatePipe } from '@angular/common';
@@ -17,6 +17,17 @@ export class MovimientosList {
   readonly movimientos = signal<Movimiento[]>([]);
   readonly isLoading = signal(true);
   readonly errorMessage = signal('');
+  readonly pageNumber = signal(1);
+  readonly pageSize = 10;
+  readonly totalRecords = signal(0);
+  readonly totalPages = computed(() =>
+    Math.max(1, Math.ceil(this.totalRecords() / this.pageSize)),
+  );
+  readonly placeholderRows = computed(() =>
+    Array.from({
+      length: Math.max(0, this.pageSize - Math.max(1, this.movimientos().length)),
+    }),
+  );
 
   constructor() {
     effect(() => {
@@ -29,9 +40,10 @@ export class MovimientosList {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.movimientosService.obtenerTodos().subscribe({
-      next: (movimientos) => {
-        this.movimientos.set(movimientos);
+    this.movimientosService.obtenerTodos(this.pageNumber(), this.pageSize).subscribe({
+      next: (resultado) => {
+        this.movimientos.set(resultado.datos);
+        this.totalRecords.set(resultado.totalRegistros);
         this.isLoading.set(false);
       },
       error: (error: unknown) => {
@@ -41,5 +53,14 @@ export class MovimientosList {
         this.isLoading.set(false);
       },
     });
+  }
+
+  goToPage(page: number): void {
+    if (this.isLoading() || page < 1 || page > this.totalPages() || page === this.pageNumber()) {
+      return;
+    }
+
+    this.pageNumber.set(page);
+    this.cargarMovimientos();
   }
 }

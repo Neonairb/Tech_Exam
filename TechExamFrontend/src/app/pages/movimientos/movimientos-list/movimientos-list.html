@@ -50,8 +50,37 @@
               <td colspan="3" class="empty-table">No hay movimientos disponibles.</td>
             </tr>
           }
+          @for (_ of placeholderRows(); track $index) {
+            <tr class="placeholder-row" aria-hidden="true">
+              <td colspan="3">&nbsp;</td>
+            </tr>
+          }
         </tbody>
       </table>
     </div>
+    <nav class="pagination-bar" aria-label="Paginación de movimientos">
+      <span class="pagination-summary">{{ totalRecords() }} movimientos</span>
+      <div class="pagination-controls">
+        <button
+          class="pagination-button"
+          type="button"
+          [disabled]="pageNumber() === 1 || isLoading()"
+          (click)="goToPage(pageNumber() - 1)"
+        >
+          Anterior
+        </button>
+        <span class="pagination-current" aria-live="polite">
+          {{ pageNumber() }} de {{ totalPages() }}
+        </span>
+        <button
+          class="pagination-button"
+          type="button"
+          [disabled]="pageNumber() === totalPages() || isLoading()"
+          (click)="goToPage(pageNumber() + 1)"
+        >
+          Siguiente
+        </button>
+      </div>
+    </nav>
   }
 </aside>

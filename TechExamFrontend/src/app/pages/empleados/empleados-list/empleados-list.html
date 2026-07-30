@@ -84,9 +84,38 @@
               <td colspan="5" class="empty-table">No hay empleados disponibles.</td>
             </tr>
           }
+          @for (_ of placeholderRows(); track $index) {
+            <tr class="placeholder-row" aria-hidden="true">
+              <td colspan="5">&nbsp;</td>
+            </tr>
+          }
         </tbody>
       </table>
     </div>
+    <nav class="pagination-bar" aria-label="Paginación de empleados">
+      <span class="pagination-summary">{{ totalRecords() }} empleados</span>
+      <div class="pagination-controls">
+        <button
+          class="pagination-button"
+          type="button"
+          [disabled]="pageNumber() === 1 || isLoading()"
+          (click)="goToPage(pageNumber() - 1)"
+        >
+          Anterior
+        </button>
+        <span class="pagination-current" aria-live="polite">
+          {{ pageNumber() }} de {{ totalPages() }}
+        </span>
+        <button
+          class="pagination-button"
+          type="button"
+          [disabled]="pageNumber() === totalPages() || isLoading()"
+          (click)="goToPage(pageNumber() + 1)"
+        >
+          Siguiente
+        </button>
+      </div>
+    </nav>
   }
 </article>
 

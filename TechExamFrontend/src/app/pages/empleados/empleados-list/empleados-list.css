@@ -16,6 +16,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+  min-height: 82px;
   padding: 1.25rem 1.25rem 1rem;
 }
 
@@ -55,7 +56,7 @@
 }
 
 .table-responsive {
-  max-height: 642px;
+  height: 644px;
   overflow: auto;
 }
 
@@ -120,6 +121,14 @@
   padding: 0.85rem 1.25rem;
   color: var(--app-text-muted);
   font-size: 0.85rem;
+}
+
+.table-hover > tbody > tr.placeholder-row:hover > * {
+  --bs-table-bg-state: transparent;
+}
+
+.placeholder-row {
+  pointer-events: none;
 }
 
 .table .employee-id {

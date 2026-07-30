@@ -13,6 +13,7 @@
 }
 
 .panel-header {
+  min-height: 82px;
   padding: 1.25rem 1.25rem 1rem;
 }
 
@@ -29,7 +30,7 @@
 }
 
 .table-responsive {
-  max-height: 601px;
+  height: 642px;
   overflow: auto;
 }
 
@@ -58,11 +59,19 @@
 }
 
 .table tbody td {
-  height: 56px;
+  height: 60px;
   padding: 0.85rem 0.8rem;
   color: var(--app-text-muted);
   font-size: 0.8rem;
   white-space: nowrap;
+}
+
+.table-hover > tbody > tr.placeholder-row:hover > * {
+  --bs-table-bg-state: transparent;
+}
+
+.placeholder-row {
+  pointer-events: none;
 }
 
 .empleado-id {

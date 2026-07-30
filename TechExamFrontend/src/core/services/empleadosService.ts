@@ -1,8 +1,9 @@
 import { inject, Service } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environments';
 import { Observable } from 'rxjs';
 import { ActualizarEmpleadoRequest, CrearEmpleadoRequest, Empleado } from '../../app/models/empleado.model';
+import { ResultadoPaginado } from '../../app/models/resultado-paginado.model';
 
 @Service()
 export class EmpleadosService {
@@ -10,8 +11,12 @@ export class EmpleadosService {
 
     private readonly apiUrl = `${environment.apiUrl}/Empleados`;
 
-    obtenerTodos(): Observable<Empleado[]> {
-        return this.http.get<Empleado[]>(this.apiUrl);
+    obtenerTodos(pageNumber = 1, pageSize = 10): Observable<ResultadoPaginado<Empleado>> {
+        const params = new HttpParams()
+            .set('pageNumber', pageNumber)
+            .set('pageSize', pageSize);
+
+        return this.http.get<ResultadoPaginado<Empleado>>(this.apiUrl, { params });
     }
 
     obtenerPorId(idEmpleado: number): Observable<Empleado> {

@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { EmpleadosService } from '../../../../core/services/empleadosService';
 import { Empleado } from '../../../models/empleado.model';
 import { DatePipe } from '@angular/common';
@@ -23,6 +23,17 @@ export class EmpleadosList {
   readonly isCreateModalOpen = signal(false);
   readonly employeeToEdit = signal<Empleado | null>(null);
   readonly employeeBeingDeactivated = signal<number | null>(null);
+  readonly pageNumber = signal(1);
+  readonly pageSize = 10;
+  readonly totalRecords = signal(0);
+  readonly totalPages = computed(() =>
+    Math.max(1, Math.ceil(this.totalRecords() / this.pageSize)),
+  );
+  readonly placeholderRows = computed(() =>
+    Array.from({
+      length: Math.max(0, this.pageSize - Math.max(1, this.empleados().length)),
+    }),
+  );
 
   constructor() {
     effect(() => {
@@ -35,9 +46,10 @@ export class EmpleadosList {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.empleadosService.obtenerTodos().subscribe({
-      next: (empleados) => {
-        this.empleados.set(empleados);
+    this.empleadosService.obtenerTodos(this.pageNumber(), this.pageSize).subscribe({
+      next: (resultado) => {
+        this.empleados.set(resultado.datos);
+        this.totalRecords.set(resultado.totalRegistros);
         this.isLoading.set(false);
       },
       error: (error: unknown) => {
@@ -47,6 +59,15 @@ export class EmpleadosList {
         this.isLoading.set(false);
       },
     });
+  }
+
+  goToPage(page: number): void {
+    if (this.isLoading() || page < 1 || page > this.totalPages() || page === this.pageNumber()) {
+      return;
+    }
+
+    this.pageNumber.set(page);
+    this.cargarEmpleados();
   }
 
   openCreateModal(): void {
