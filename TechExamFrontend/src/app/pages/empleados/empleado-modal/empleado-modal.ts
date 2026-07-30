@@ -95,6 +95,18 @@ export class EmpleadoModal {
     request$.subscribe({
       next: (employee) => {
         this.saved.emit(employee);
+
+        void Swal.fire({
+          icon: 'success',
+          title: isEditing ? 'Empleado actualizado' : 'Empleado creado',
+          text: isEditing
+            ? `Los datos de ${employee.nombre} se actualizaron correctamente.`
+            : `${employee.nombre} fue agregado correctamente.`,
+          confirmButtonText: 'Entendido',
+          background: 'var(--app-surface)',
+          color: 'var(--app-text)',
+          confirmButtonColor: 'var(--app-accent)',
+        });
       },
       error: (error: unknown) => {
         const fallback = isEditing
