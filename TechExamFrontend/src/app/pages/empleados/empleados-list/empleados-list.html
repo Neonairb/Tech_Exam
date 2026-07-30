@@ -13,10 +13,30 @@
         </span>
       </p>
     </div>
-    <button class="btn btn-primary new-employee-button" type="button" (click)="openCreateModal()">
-      <span aria-hidden="true">+</span>
-      Nuevo
-    </button>
+    <div class="header-actions">
+      <div class="employee-search">
+        <label class="visually-hidden" for="employee-search">Buscar empleados</label>
+        <input
+          id="employee-search"
+          class="form-control"
+          type="search"
+          placeholder="Buscar por nombre o ID"
+          autocomplete="off"
+          [attr.aria-invalid]="searchError() ? true : null"
+          [attr.aria-describedby]="searchError() ? 'employee-search-error' : null"
+          (input)="updateSearch($event)"
+        />
+        @if (searchError()) {
+          <small id="employee-search-error" class="search-error" role="alert">
+            {{ searchError() }}
+          </small>
+        }
+      </div>
+      <button class="btn btn-primary new-employee-button" type="button" (click)="openCreateModal()">
+        <span aria-hidden="true">+</span>
+        Nuevo
+      </button>
+    </div>
   </div>
 
   @if (isLoading()) {

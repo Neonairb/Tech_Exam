@@ -11,10 +11,18 @@ export class EmpleadosService {
 
     private readonly apiUrl = `${environment.apiUrl}/Empleados`;
 
-    obtenerTodos(pageNumber = 1, pageSize = 10): Observable<ResultadoPaginado<Empleado>> {
-        const params = new HttpParams()
+    obtenerTodos(
+        pageNumber = 1,
+        pageSize = 10,
+        query = '',
+    ): Observable<ResultadoPaginado<Empleado>> {
+        let params = new HttpParams()
             .set('pageNumber', pageNumber)
             .set('pageSize', pageSize);
+
+        if (query.trim()) {
+            params = params.set('query', query.trim());
+        }
 
         return this.http.get<ResultadoPaginado<Empleado>>(this.apiUrl, { params });
     }

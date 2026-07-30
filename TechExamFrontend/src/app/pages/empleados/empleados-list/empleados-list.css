@@ -255,7 +255,8 @@
 
 @media (max-width: 576px) {
   .panel-header {
-    align-items: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
   }
 
   .new-employee-button {
@@ -265,4 +266,5 @@
   .employee-summary {
     gap: 0.55rem;
   }
+
 }

@@ -1,10 +1,12 @@
-import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal, untracked } from '@angular/core';
 import { EmpleadosService } from '../../../../core/services/empleadosService';
 import { Empleado } from '../../../models/empleado.model';
 import { DatePipe } from '@angular/common';
 import { EmpleadoModal } from '../empleado-modal/empleado-modal';
 import { getApiErrorMessage } from '../../../../core/utils/api-error';
 import Swal from 'sweetalert2';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-empleados-list',
@@ -14,6 +16,8 @@ import Swal from 'sweetalert2';
 })
 export class EmpleadosList {
   private readonly empleadosService = inject(EmpleadosService);
+  private readonly searchChanges = new Subject<string>();
+  private requestRevision = 0;
 
   readonly refreshRevision = input(0);
   readonly selectedEmployeeId = input<number | null>(null);
@@ -30,6 +34,8 @@ export class EmpleadosList {
   readonly totalRecords = signal(0);
   readonly totalActive = signal(0);
   readonly totalInactive = signal(0);
+  readonly searchQuery = signal('');
+  readonly searchError = signal('');
   readonly totalPages = computed(() =>
     Math.max(1, Math.ceil(this.totalRecords() / this.pageSize)),
   );
@@ -42,16 +48,36 @@ export class EmpleadosList {
   constructor() {
     effect(() => {
       this.refreshRevision();
-      this.cargarEmpleados();
+      untracked(() => this.cargarEmpleados());
     });
+
+    this.searchChanges
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed())
+      .subscribe((query) => {
+        if (query.length > 50) {
+          this.searchError.set('La búsqueda no puede tener más de 50 caracteres.');
+          return;
+        }
+
+        this.searchError.set('');
+        this.pageNumber.set(1);
+        this.cargarEmpleados();
+      });
   }
 
   cargarEmpleados() {
     this.isLoading.set(true);
     this.errorMessage.set('');
+    const requestRevision = ++this.requestRevision;
 
-    this.empleadosService.obtenerTodos(this.pageNumber(), this.pageSize).subscribe({
+    this.empleadosService
+      .obtenerTodos(this.pageNumber(), this.pageSize, this.searchQuery())
+      .subscribe({
       next: (resultado) => {
+        if (requestRevision !== this.requestRevision) {
+          return;
+        }
+
         this.empleados.set(resultado.datos);
         this.totalRecords.set(resultado.totalRegistros);
         this.totalActive.set(resultado.totalActivos ?? 0);
@@ -59,12 +85,16 @@ export class EmpleadosList {
         this.isLoading.set(false);
       },
       error: (error: unknown) => {
+        if (requestRevision !== this.requestRevision) {
+          return;
+        }
+
         this.errorMessage.set(
           getApiErrorMessage(error, 'No fue posible cargar los empleados. Intenta nuevamente.'),
         );
         this.isLoading.set(false);
       },
-    });
+      });
   }
 
   goToPage(page: number): void {
@@ -74,6 +104,17 @@ export class EmpleadosList {
 
     this.pageNumber.set(page);
     this.cargarEmpleados();
+  }
+
+  updateSearch(event: Event): void {
+    const query = (event.target as HTMLInputElement).value;
+    this.searchQuery.set(query);
+
+    if (query.length > 50) {
+      this.searchError.set('La búsqueda no puede tener más de 50 caracteres.');
+    }
+
+    this.searchChanges.next(query);
   }
 
   selectEmployee(employee: Empleado): void {
