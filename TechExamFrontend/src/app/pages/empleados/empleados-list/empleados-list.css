@@ -22,7 +22,7 @@
 
 .panel-header h2 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: 650;
 }
 
@@ -42,7 +42,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   font-weight: 600;
 }
 
