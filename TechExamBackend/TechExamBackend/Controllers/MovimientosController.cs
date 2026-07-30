@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TechExamBackend.Models;
+using TechExamBackend.Models.Common;
 using TechExamBackend.Repositories;
 
 namespace TechExamBackend.Controllers
@@ -16,11 +17,28 @@ namespace TechExamBackend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyCollection<Movimiento>>> ObtenerTodos(
-            CancellationToken cancellationToken
+        public async Task<ActionResult<ResultadoPaginado<Movimiento>>> ObtenerTodos(
+            CancellationToken cancellationToken,
+            int pageNumber = 1,
+            int pageSize = 10
         )
         {
-            var movimientos = await _movimientosRepository.ObtenerTodosAsync(cancellationToken);
+            if (pageNumber < 1)
+            {
+                return BadRequest(new
+                {
+                    mensaje = $"El número de página debe ser mayor que cero."
+                });
+            }
+            if (pageSize < 1 || pageSize > 100)
+            {
+                return BadRequest(new
+                {
+                    mensaje = $"El tamaño de página debe estar entre 1 y 100."
+                });
+            }
+
+            var movimientos = await _movimientosRepository.ObtenerTodosAsync(pageNumber, pageSize, cancellationToken);
 
             return Ok(movimientos);
         }
@@ -46,11 +64,27 @@ namespace TechExamBackend.Controllers
 
         [HttpGet("empleado/{idEmpleado:int}")]
         public async Task<ActionResult<IReadOnlyCollection<Movimiento>>> ObtenerPorEmpleado(
+            CancellationToken cancellationToken,
             int idEmpleado,
-            CancellationToken cancellationToken
+            int pageNumber = 1,
+            int pageSize = 10
         )
         {
-            var movimientos = await _movimientosRepository.ObtenerPorEmpleadoAsync(idEmpleado, cancellationToken);
+            if (pageNumber < 1)
+            {
+                return BadRequest(new
+                {
+                    mensaje = $"El número de página debe ser mayor que cero."
+                });
+            }
+            if (pageSize < 1 || pageSize> 100)
+            {
+                return BadRequest(new
+                {
+                mensaje = $"El tamaño de página debe estar entre 1 y 100."
+                });
+            }
+            var movimientos = await _movimientosRepository.ObtenerPorEmpleadoAsync(idEmpleado, pageNumber, pageSize, cancellationToken);
 
             return Ok(movimientos);
         }

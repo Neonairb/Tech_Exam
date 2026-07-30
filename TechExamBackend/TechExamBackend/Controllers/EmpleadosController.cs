@@ -3,6 +3,7 @@ using TechExamBackend.Models;
 using TechExamBackend.Repositories;
 using TechExamBackend.Dtos;
 using Microsoft.Data.SqlClient;
+using TechExamBackend.Models.Common;
 
 namespace TechExamBackend.Controllers
 {
@@ -20,13 +21,30 @@ namespace TechExamBackend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyCollection<Empleado>>> ObtenerTodos(
-            CancellationToken cancellationToken
+        public async Task<ActionResult<ResultadoPaginado<Empleado>>> ObtenerTodos(
+            CancellationToken cancellationToken,
+            int pageNumber = 1,
+            int pageSize = 10
         )
         {
-            var empleados = await _empleadoRepository.ObtenerTodosAsync(cancellationToken);
+            if (pageNumber < 1)
+            {
+                return BadRequest(new
+                {
+                    mensaje = $"El número de página debe ser mayor que cero."
+                });
+            }
+            if (pageSize < 1 || pageSize > 100)
+            {
+                return BadRequest(new
+                {
+                    mensaje = $"El tamaño de página debe estar entre 1 y 100."
+                });
+            }
 
-            return Ok(empleados);
+            var resultadoPaginado = await _empleadoRepository.ObtenerTodosAsync(pageNumber, pageSize, cancellationToken);
+
+            return Ok(resultadoPaginado);
         }
 
         [HttpGet("{idEmpleado:int}")]

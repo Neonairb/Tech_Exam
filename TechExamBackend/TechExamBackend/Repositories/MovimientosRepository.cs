@@ -2,6 +2,7 @@
 using System.Data;
 using TechExamBackend.Data;
 using TechExamBackend.Models;
+using TechExamBackend.Models.Common;
 
 namespace TechExamBackend.Repositories
 {
@@ -25,7 +26,11 @@ namespace TechExamBackend.Repositories
                 "sp_Movimientos_ObtenerPorEmpleado";
         }
 
-        public async Task<IReadOnlyCollection<Movimiento>> ObtenerTodosAsync(CancellationToken cancellationToken = default)
+        public async Task<ResultadoPaginado<Movimiento>> ObtenerTodosAsync(
+            int pageNumber = 1,
+            int pageSize = 10,
+            CancellationToken cancellationToken = default
+        )
         {
             var movimientos = new List<Movimiento>();
 
@@ -33,6 +38,20 @@ namespace TechExamBackend.Repositories
                 _connectionFactory,
                 Sp.ObtenerTodos,
                 cancellationToken
+            );
+
+            context.AddParameter(
+                new SqlParameter("@PageNumber", SqlDbType.Int)
+                {
+                    Value = pageNumber
+                }
+            );
+
+            context.AddParameter(
+                new SqlParameter("@PageSize", SqlDbType.Int)
+                {
+                    Value = pageSize
+                }
             );
 
             await using var reader = await context.Command.ExecuteReaderAsync(
@@ -44,7 +63,23 @@ namespace TechExamBackend.Repositories
                 movimientos.Add(MapearMovimiento(reader));
             }
 
-            return movimientos;
+            var totalRegistros = 0;
+
+            if (
+                await reader.NextResultAsync(cancellationToken)
+                && await reader.ReadAsync(cancellationToken)
+            )
+            {
+                totalRegistros = reader.GetInt32(
+                    reader.GetOrdinal("TotalRegistros")
+                );
+            }
+
+            return new ResultadoPaginado<Movimiento>
+            {
+                Datos = movimientos,
+                TotalRegistros = totalRegistros
+            };
         }
         public async Task<Movimiento?> ObtenerPorIdAsync(
             int idMovimiento,
@@ -76,8 +111,10 @@ namespace TechExamBackend.Repositories
 
             return MapearMovimiento(reader);
         }
-        public async Task<IReadOnlyCollection<Movimiento>> ObtenerPorEmpleadoAsync(
+        public async Task<ResultadoPaginado<Movimiento>> ObtenerPorEmpleadoAsync(
             int idEmpleado,
+            int pageNumber = 1,
+            int pageSize = 10,
             CancellationToken cancellationToken = default
         )
         {
@@ -96,6 +133,20 @@ namespace TechExamBackend.Repositories
                 }
             );
 
+            context.AddParameter(
+                new SqlParameter("@PageNumber", SqlDbType.Int)
+                {
+                    Value = pageNumber
+                }
+            );
+
+            context.AddParameter(
+                new SqlParameter("@PageSize", SqlDbType.Int)
+                {
+                    Value = pageSize
+                }
+            );
+
             await using var reader = await context.Command.ExecuteReaderAsync(
                 cancellationToken
             );
@@ -105,7 +156,23 @@ namespace TechExamBackend.Repositories
                 movimientos.Add(MapearMovimiento(reader));
             }
 
-            return movimientos;
+            var totalRegistros = 0;
+
+            if (
+                await reader.NextResultAsync(cancellationToken)
+                && await reader.ReadAsync(cancellationToken)
+            )
+            {
+                totalRegistros = reader.GetInt32(
+                    reader.GetOrdinal("TotalRegistros")
+                );
+            }
+
+            return new ResultadoPaginado<Movimiento>
+            {
+                Datos = movimientos,
+                TotalRegistros = totalRegistros
+            };
         }
         private static Movimiento MapearMovimiento(SqlDataReader reader)
         {

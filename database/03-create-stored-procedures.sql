@@ -11,7 +11,7 @@ BEGIN
     
     IF @PageNumber < 1
     BEGIN
-        THROW 50001, 'El número de página y el tamaño de página deben ser mayores que cero.', 1;
+        THROW 50001, 'El número de página debe ser mayor que cero.', 1;
     END;
 
     IF @PageSize < 1 OR @PageSize > 100
@@ -214,7 +214,7 @@ BEGIN
     
     IF @PageNumber < 1
     BEGIN
-        THROW 50001, 'El número de página y el tamaño de página deben ser mayores que cero.', 1;
+        THROW 50001, 'El número de página debe ser mayor que cero.', 1;
     END;
 
     IF @PageSize < 1 OR @PageSize > 100
@@ -255,7 +255,7 @@ BEGIN
 
     IF @PageNumber < 1
     BEGIN
-        THROW 50001, 'El número de página y el tamaño de página deben ser mayores que cero.', 1;
+        THROW 50001, 'El número de página debe ser mayor que cero.', 1;
     END;
 
     IF @PageSize < 1 OR @PageSize > 100

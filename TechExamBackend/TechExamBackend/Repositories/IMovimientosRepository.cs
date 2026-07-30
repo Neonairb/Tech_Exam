@@ -1,18 +1,23 @@
 ﻿using TechExamBackend.Models;
+using TechExamBackend.Models.Common;
 
 namespace TechExamBackend.Repositories
 {
     public interface IMovimientosRepository
     {
-        Task<IReadOnlyCollection<Movimiento>> ObtenerTodosAsync(
+        Task<ResultadoPaginado<Movimiento>> ObtenerTodosAsync(
+            int pageNumber = 1,
+            int pageSize = 10,
             CancellationToken cancellationToken = default
         );
         Task<Movimiento?> ObtenerPorIdAsync(
             int idMovimiento,
             CancellationToken cancellationToken = default
         );
-        Task<IReadOnlyCollection<Movimiento>> ObtenerPorEmpleadoAsync(
+        Task<ResultadoPaginado<Movimiento>> ObtenerPorEmpleadoAsync(
             int idEmpleado,
+            int pageNumber = 1,
+            int pageSize = 10,
             CancellationToken cancellationToken = default
         );
     }

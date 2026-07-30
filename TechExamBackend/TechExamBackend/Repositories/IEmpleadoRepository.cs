@@ -1,11 +1,14 @@
 ﻿using TechExamBackend.Dtos;
 using TechExamBackend.Models;
+using TechExamBackend.Models.Common;
 
 namespace TechExamBackend.Repositories
 {
     public interface IEmpleadoRepository
     {
-        Task<IReadOnlyCollection<Empleado>> ObtenerTodosAsync(
+        Task<ResultadoPaginado<Empleado>> ObtenerTodosAsync(
+            int pageNumber = 1,
+            int pageSize = 10,
             CancellationToken cancellationToken = default
         );
 

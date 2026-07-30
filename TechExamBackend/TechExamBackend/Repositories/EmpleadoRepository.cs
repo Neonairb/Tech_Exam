@@ -3,6 +3,7 @@ using TechExamBackend.Data;
 using System.Data;
 using TechExamBackend.Dtos;
 using TechExamBackend.Models;
+using TechExamBackend.Models.Common;
 
 namespace TechExamBackend.Repositories
 {
@@ -32,7 +33,11 @@ namespace TechExamBackend.Repositories
                 "sp_Empleados_DarDeBaja";
         }
 
-        public async Task<IReadOnlyCollection<Empleado>> ObtenerTodosAsync(CancellationToken cancellationToken = default)
+        public async Task<ResultadoPaginado<Empleado>> ObtenerTodosAsync(
+            int pageNumber = 1,
+            int pageSize = 10,
+            CancellationToken cancellationToken = default
+        )
         {
             var empleados = new List<Empleado>();
 
@@ -40,6 +45,20 @@ namespace TechExamBackend.Repositories
                 _connectionFactory,
                 Sp.ObtenerTodos,
                 cancellationToken
+            );
+
+            context.AddParameter(
+                new SqlParameter("@PageNumber", SqlDbType.Int)
+                {
+                    Value = pageNumber
+                }
+            );
+
+            context.AddParameter(
+                new SqlParameter("@PageSize", SqlDbType.Int)
+                {
+                    Value = pageSize
+                }
             );
 
             await using var reader = await context.Command.ExecuteReaderAsync(
@@ -51,7 +70,23 @@ namespace TechExamBackend.Repositories
                 empleados.Add(MapearEmpleado(reader));
             }
 
-            return empleados;
+            var totalRegistros = 0;
+
+            if (
+                await reader.NextResultAsync(cancellationToken)
+                && await reader.ReadAsync(cancellationToken)
+            )
+            {
+                totalRegistros = reader.GetInt32(
+                    reader.GetOrdinal("TotalRegistros")
+                );
+            }
+
+            return new ResultadoPaginado<Empleado>
+            {
+                Datos = empleados,
+                TotalRegistros = totalRegistros
+            };
         }
         public async Task<Empleado?> ObtenerPorIdAsync(int idEmpleado, CancellationToken cancellationToken = default)
         {
