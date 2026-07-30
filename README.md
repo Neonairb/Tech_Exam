@@ -24,7 +24,8 @@
 ## Frontend
 - Empece por generar las plantillas de los componentes, servicios y modelos.
 - Habilite HttpClient en el app.config.
-- Instale bootstrap
+- Instale bootstrap para componentes de diseno
+- Instale sweetalert2 para alertas modernas
 - la estructura fue creada en este orden:
     - Models
     - Services
