@@ -24,8 +24,9 @@
 ## Frontend
 - Empece por generar las plantillas de los componentes, servicios y modelos.
 - Habilite HttpClient en el app.config.
+- Instale bootstrap
 - la estructura fue creada en este orden:
     - Models
     - Services
     - Routes
-    - 
+    - Pantallas
