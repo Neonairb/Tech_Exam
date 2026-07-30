@@ -3,11 +3,32 @@ GO
 
 -- Empleados
 CREATE OR ALTER PROCEDURE sp_Empleados_ObtenerTodos
+    @PageNumber INT = 1,
+    @PageSize INT = 10
 AS
 BEGIN
     SET NOCOUNT ON;
-    SELECT * FROM Empleados
-    ORDER BY Nombre;
+    
+    IF @PageNumber < 1 OR @PageSize < 1
+    BEGIN
+        THROW 50001, 'El número de página y el tamaño de página deben ser mayores que cero.', 1;
+    END;
+
+    IF @PageSize < 1 OR @PageSize > 100
+    BEGIN
+        THROW 50001, 'El tamaño de página debe estar entre 1 y 100.', 1;
+    END;
+
+    DECLARE @Offset INT = (@PageNumber - 1) * @PageSize;
+
+    SELECT *
+    FROM Empleados
+    ORDER BY IdEmpleado
+    OFFSET @Offset ROWS
+    FETCH NEXT @PageSize ROWS ONLY;
+
+    SELECT COUNT(*) AS TotalRegistros
+    FROM Empleados;
 END;
 GO
 
@@ -174,11 +195,32 @@ GO
 
 -- Movimientos
 CREATE OR ALTER PROCEDURE sp_Movimientos_ObtenerTodos
+    @PageNumber INT = 1,
+    @PageSize INT = 10
 AS
 BEGIN
     SET NOCOUNT ON;
-    SELECT * FROM Movimientos
-    ORDER BY FechaMovimiento DESC;
+    
+    IF @PageNumber < 1 OR @PageSize < 1
+    BEGIN
+        THROW 50001, 'El número de página y el tamaño de página deben ser mayores que cero.', 1;
+    END;
+
+    IF @PageSize < 1 OR @PageSize > 100
+    BEGIN
+        THROW 50001, 'El tamaño de página debe estar entre 1 y 100.', 1;
+    END;
+    
+    DECLARE @Offset INT = (@PageNumber - 1) * @PageSize;
+
+    SELECT *
+    FROM Movimientos
+    ORDER BY FechaMovimiento DESC
+    OFFSET @Offset ROWS
+    FETCH NEXT @PageSize ROWS ONLY;
+
+    SELECT COUNT(*) AS TotalRegistros
+    FROM Movimientos;
 END;
 GO
 
@@ -193,13 +235,35 @@ END;
 GO
 
 CREATE OR ALTER PROCEDURE sp_Movimientos_ObtenerPorEmpleado
-    @IdEmpleado INT
+    @IdEmpleado INT,
+    @PageNumber INT = 1,
+    @PageSize INT = 10
 AS
 BEGIN
     SET NOCOUNT ON;
-    SELECT * FROM Movimientos AS m
-    WHERE m.IdEmpleado = @IdEmpleado
-    ORDER BY FechaMovimiento DESC;
+
+    IF @PageNumber < 1 OR @PageSize < 1
+    BEGIN
+        THROW 50001, 'El número de página y el tamaño de página deben ser mayores que cero.', 1;
+    END;
+
+    IF @PageSize < 1 OR @PageSize > 100
+    BEGIN
+        THROW 50001, 'El tamaño de página debe estar entre 1 y 100.', 1;
+    END;
+    
+    DECLARE @Offset INT = (@PageNumber - 1) * @PageSize;
+
+    SELECT *
+    FROM Movimientos
+    WHERE IdEmpleado = @IdEmpleado
+    ORDER BY FechaMovimiento DESC
+    OFFSET @Offset ROWS
+    FETCH NEXT @PageSize ROWS ONLY;
+
+    SELECT COUNT(*) AS TotalRegistros
+    FROM Movimientos
+    WHERE IdEmpleado = @IdEmpleado;
 END;
 GO
 
