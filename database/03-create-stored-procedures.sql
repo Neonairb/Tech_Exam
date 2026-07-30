@@ -9,7 +9,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    IF @PageNumber < 1 OR @PageSize < 1
+    IF @PageNumber < 1
     BEGIN
         THROW 50001, 'El número de página y el tamaño de página deben ser mayores que cero.', 1;
     END;
@@ -201,7 +201,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    IF @PageNumber < 1 OR @PageSize < 1
+    IF @PageNumber < 1
     BEGIN
         THROW 50001, 'El número de página y el tamaño de página deben ser mayores que cero.', 1;
     END;
@@ -242,7 +242,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    IF @PageNumber < 1 OR @PageSize < 1
+    IF @PageNumber < 1
     BEGIN
         THROW 50001, 'El número de página y el tamaño de página deben ser mayores que cero.', 1;
     END;
@@ -284,7 +284,8 @@ BEGIN TRY
     INSERT INTO @EmpleadosDepurados (IdEmpleado)
     SELECT e.IdEmpleado
     FROM Empleados AS e
-    WHERE
+    WHERE e.Activo = 0
+    AND
     (
         SELECT MAX(m.FechaMovimiento)
         FROM Movimientos AS m
