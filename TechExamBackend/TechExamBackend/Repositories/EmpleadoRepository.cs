@@ -71,6 +71,8 @@ namespace TechExamBackend.Repositories
             }
 
             var totalRegistros = 0;
+            var totalActivos = 0;
+            var totalInactivos = 0;
 
             if (
                 await reader.NextResultAsync(cancellationToken)
@@ -80,12 +82,20 @@ namespace TechExamBackend.Repositories
                 totalRegistros = reader.GetInt32(
                     reader.GetOrdinal("TotalRegistros")
                 );
+                totalActivos = reader.GetInt32(
+                    reader.GetOrdinal("TotalActivos")
+                );
+                totalInactivos = reader.GetInt32(
+                    reader.GetOrdinal("TotalInactivos")
+                );
             }
 
             return new ResultadoPaginado<Empleado>
             {
                 Datos = empleados,
-                TotalRegistros = totalRegistros
+                TotalRegistros = totalRegistros,
+                TotalActivos = totalActivos,
+                TotalInactivos = totalInactivos
             };
         }
         public async Task<Empleado?> ObtenerPorIdAsync(int idEmpleado, CancellationToken cancellationToken = default)

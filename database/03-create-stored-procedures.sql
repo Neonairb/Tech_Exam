@@ -27,7 +27,16 @@ BEGIN
     OFFSET @Offset ROWS
     FETCH NEXT @PageSize ROWS ONLY;
 
-    SELECT COUNT(*) AS TotalRegistros
+    SELECT
+        COUNT(*) AS TotalRegistros,
+        COALESCE(
+            SUM(CASE WHEN Activo = 1 THEN 1 ELSE 0 END),
+            0
+        ) AS TotalActivos,
+        COALESCE(
+            SUM(CASE WHEN Activo = 0 THEN 1 ELSE 0 END),
+            0
+        ) AS TotalInactivos
     FROM Empleados;
 END;
 GO
@@ -60,7 +69,7 @@ BEGIN TRY
     IF EXISTS
     (
         SELECT 1
-        FROM dbo.Empleados
+        FROM Empleados
         WHERE IdEmpleado = @IdEmpleado
     )
     BEGIN
@@ -118,7 +127,7 @@ BEGIN TRY
     IF EXISTS
     (
         SELECT 1
-        FROM dbo.Empleados
+        FROM Empleados
         WHERE IdEmpleado = @IdEmpleado
           AND Activo = 0
     )
@@ -167,7 +176,7 @@ BEGIN TRY
     IF EXISTS
     (
         SELECT 1
-        FROM dbo.Empleados
+        FROM Empleados
         WHERE IdEmpleado = @IdEmpleado
         AND Activo = 0
     )
