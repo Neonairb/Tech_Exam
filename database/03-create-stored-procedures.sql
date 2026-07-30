@@ -115,6 +115,17 @@ BEGIN TRY
         THROW 50003, 'El nombre del empleado es obligatorio.', 1;
     END;
 
+    IF EXISTS
+    (
+        SELECT 1
+        FROM dbo.Empleados
+        WHERE IdEmpleado = @IdEmpleado
+          AND Activo = 0
+    )
+    BEGIN
+        THROW 50006, 'No se puede modificar un empleado inactivo.', 1;
+    END;
+
     UPDATE Empleados
     SET Nombre = @Nombre,
         FechaModificacion = SYSDATETIME()
