@@ -17,6 +17,7 @@ export class MovimientosList {
 
   readonly refreshRevision = input(0);
   readonly selectedEmployeeId = input<number | null>(null);
+  readonly employeeName = input<string>('');
   readonly showAllRequested = output<void>();
   readonly movimientos = signal<Movimiento[]>([]);
   readonly isLoading = signal(true);

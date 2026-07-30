@@ -1,10 +1,10 @@
 <aside class="content-panel movements-panel" aria-labelledby="movements-title">
   <div class="panel-header">
     <div>
-      <h2 id="movements-title">Movimientos</h2>
+      <h2 id="movements-title">Reporte de Movimientos</h2>
       <p>
         @if (selectedEmployeeId(); as employeeId) {
-          Actividad del empleado #{{ employeeId }}.
+          {{ employeeName() }} - empleado #{{ employeeId }}.
         } @else {
           Actividad reciente del personal.
         }

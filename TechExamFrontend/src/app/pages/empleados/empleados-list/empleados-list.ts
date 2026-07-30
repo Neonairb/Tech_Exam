@@ -22,7 +22,7 @@ export class EmpleadosList {
   readonly refreshRevision = input(0);
   readonly selectedEmployeeId = input<number | null>(null);
   readonly employeeChanged = output<void>();
-  readonly employeeSelected = output<number>();
+  readonly employeeSelected = output<Empleado>();
   readonly empleados = signal<Empleado[]>([]);
   readonly isLoading = signal(true);
   readonly errorMessage = signal('');
@@ -118,7 +118,7 @@ export class EmpleadosList {
   }
 
   selectEmployee(employee: Empleado): void {
-    this.employeeSelected.emit(employee.idEmpleado);
+    this.employeeSelected.emit(employee);
   }
 
   handleEmployeeKeydown(event: KeyboardEvent, employee: Empleado): void {
