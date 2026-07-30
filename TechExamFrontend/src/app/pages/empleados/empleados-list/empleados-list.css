@@ -179,6 +179,13 @@
   color: #ef8b8b;
 }
 
+.action-button:disabled {
+  border-color: var(--app-border);
+  background: transparent;
+  color: var(--app-text-muted);
+  opacity: 0.5;
+}
+
 .empty-table {
   padding-block: 2.5rem !important;
   text-align: center;

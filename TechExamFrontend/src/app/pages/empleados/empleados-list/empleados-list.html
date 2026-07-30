@@ -61,10 +61,19 @@
                     <button
                       class="btn action-button action-button-danger"
                       type="button"
-                      aria-label="Dar de baja al empleado"
+                      [attr.aria-label]="'Dar de baja a ' + empleado.nombre"
                       title="Dar de baja"
+                      [disabled]="employeeBeingDeactivated() !== null"
+                      (click)="deactivateEmployee(empleado)"
                     >
-                      ⊘
+                      @if (employeeBeingDeactivated() === empleado.idEmpleado) {
+                        <span
+                          class="spinner-border spinner-border-sm"
+                          aria-hidden="true"
+                        ></span>
+                      } @else {
+                        ⊘
+                      }
                     </button>
                   }
                 </div>
