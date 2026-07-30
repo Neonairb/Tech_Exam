@@ -6,6 +6,8 @@
 
         public int IdEmpleado { get; set; }
 
+        public string Nombre { get; set; } = string.Empty;
+
         public string TipoMovimiento { get; set; } = string.Empty;
 
         public DateTime FechaMovimiento { get; set; }

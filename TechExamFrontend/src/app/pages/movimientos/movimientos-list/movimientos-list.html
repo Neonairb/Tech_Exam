@@ -39,7 +39,7 @@
         <tbody>
           @for (movimiento of movimientos(); track movimiento.idMovimiento) {
             <tr>
-              <td class="empleado-id">#{{ movimiento.idEmpleado }}</td>
+              <td class="nombreEmpleado">{{ movimiento.nombre }}</td>
               <td>
                 <span
                   class="movement-type"

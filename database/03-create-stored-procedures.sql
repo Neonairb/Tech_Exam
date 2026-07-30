@@ -242,9 +242,14 @@ BEGIN
     
     DECLARE @Offset INT = (@PageNumber - 1) * @PageSize;
 
-    SELECT *
-    FROM Movimientos
-    ORDER BY FechaMovimiento DESC
+    SELECT m.IdMovimiento,
+            m.IdEmpleado,
+            e.Nombre, 
+            m.TipoMovimiento,
+            m.FechaMovimiento
+    FROM Movimientos as m
+    INNER JOIN Empleados as e ON m.IdEmpleado = e.IdEmpleado
+    ORDER BY m.FechaMovimiento DESC
     OFFSET @Offset ROWS
     FETCH NEXT @PageSize ROWS ONLY;
 
@@ -283,10 +288,15 @@ BEGIN
     
     DECLARE @Offset INT = (@PageNumber - 1) * @PageSize;
 
-    SELECT *
-    FROM Movimientos
-    WHERE IdEmpleado = @IdEmpleado
-    ORDER BY FechaMovimiento DESC
+    SELECT m.IdMovimiento,
+            m.IdEmpleado,
+            e.Nombre, 
+            m.TipoMovimiento,
+            m.FechaMovimiento
+    FROM Movimientos as m
+    INNER JOIN Empleados as e ON m.IdEmpleado = e.IdEmpleado
+    WHERE m.IdEmpleado = @IdEmpleado
+    ORDER BY m.FechaMovimiento DESC
     OFFSET @Offset ROWS
     FETCH NEXT @PageSize ROWS ONLY;
 

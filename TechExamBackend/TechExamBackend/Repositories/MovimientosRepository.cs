@@ -186,6 +186,10 @@ namespace TechExamBackend.Repositories
                     reader.GetOrdinal("IdEmpleado")
                 ),
 
+                Nombre = reader.GetString(
+                    reader.GetOrdinal("Nombre")
+                ),
+
                 TipoMovimiento = reader.GetString(
                     reader.GetOrdinal("TipoMovimiento")
                 ),
