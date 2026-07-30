@@ -16,7 +16,9 @@ export class EmpleadosList {
   private readonly empleadosService = inject(EmpleadosService);
 
   readonly refreshRevision = input(0);
+  readonly selectedEmployeeId = input<number | null>(null);
   readonly employeeChanged = output<void>();
+  readonly employeeSelected = output<number>();
   readonly empleados = signal<Empleado[]>([]);
   readonly isLoading = signal(true);
   readonly errorMessage = signal('');
@@ -72,6 +74,19 @@ export class EmpleadosList {
 
     this.pageNumber.set(page);
     this.cargarEmpleados();
+  }
+
+  selectEmployee(employee: Empleado): void {
+    this.employeeSelected.emit(employee.idEmpleado);
+  }
+
+  handleEmployeeKeydown(event: KeyboardEvent, employee: Empleado): void {
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+
+    event.preventDefault();
+    this.selectEmployee(employee);
   }
 
   openCreateModal(): void {

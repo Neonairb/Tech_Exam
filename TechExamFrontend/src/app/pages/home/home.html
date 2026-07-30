@@ -1,4 +1,13 @@
 <section class="home-grid" aria-label="Gestión de empleados">
-  <app-empleados-list [refreshRevision]="refreshRevision()" (employeeChanged)="refreshLists()" />
-  <app-movimientos-list [refreshRevision]="refreshRevision()" />
+  <app-empleados-list
+    [refreshRevision]="refreshRevision()"
+    [selectedEmployeeId]="selectedEmployeeId()"
+    (employeeChanged)="refreshLists()"
+    (employeeSelected)="selectEmployee($event)"
+  />
+  <app-movimientos-list
+    [refreshRevision]="refreshRevision()"
+    [selectedEmployeeId]="selectedEmployeeId()"
+    (showAllRequested)="clearEmployeeSelection()"
+  />
 </section>

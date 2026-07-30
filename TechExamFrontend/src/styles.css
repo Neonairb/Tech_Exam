@@ -97,6 +97,23 @@ a:hover {
   white-space: nowrap;
 }
 
+.employee-row {
+  cursor: pointer;
+}
+
+.employee-row-selected > * {
+  background: color-mix(in srgb, var(--app-accent) 10%, transparent);
+}
+
+.employee-row-selected > td:first-child {
+  box-shadow: inset 3px 0 0 var(--app-accent);
+}
+
+.employee-row:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: -2px;
+}
+
 @media (max-width: 576px) {
   .pagination-bar {
     align-items: stretch;

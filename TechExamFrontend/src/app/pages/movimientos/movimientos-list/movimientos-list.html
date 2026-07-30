@@ -2,8 +2,19 @@
   <div class="panel-header">
     <div>
       <h2 id="movements-title">Movimientos</h2>
-      <p>Actividad reciente del personal.</p>
+      <p>
+        @if (selectedEmployeeId(); as employeeId) {
+          Actividad del empleado #{{ employeeId }}.
+        } @else {
+          Actividad reciente del personal.
+        }
+      </p>
     </div>
+    @if (selectedEmployeeId() !== null) {
+      <button class="show-all-button" type="button" (click)="showAllMovements()">
+        Ver todos
+      </button>
+    }
   </div>
 
   @if (isLoading()) {

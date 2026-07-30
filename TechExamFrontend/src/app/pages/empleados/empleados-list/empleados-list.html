@@ -42,7 +42,16 @@
         </thead>
         <tbody>
           @for (empleado of empleados(); track empleado.idEmpleado) {
-            <tr>
+            <tr
+              class="employee-row"
+              [class.employee-row-selected]="selectedEmployeeId() === empleado.idEmpleado"
+              [attr.aria-selected]="selectedEmployeeId() === empleado.idEmpleado"
+              [attr.aria-label]="'Ver movimientos de ' + empleado.nombre"
+              role="button"
+              tabindex="0"
+              (click)="selectEmployee(empleado)"
+              (keydown)="handleEmployeeKeydown($event, empleado)"
+            >
               <td class="employee-id">#{{ empleado.idEmpleado }}</td>
               <td class="employee-name">{{ empleado.nombre }}</td>
               <td>
