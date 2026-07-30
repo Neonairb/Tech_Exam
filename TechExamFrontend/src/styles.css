@@ -125,6 +125,7 @@ a:hover {
 }
 
 .employee-search .form-control {
+  height: 1.5rem;
   min-height: 2.35rem;
   border-color: var(--app-border);
   background: var(--app-bg);
