@@ -23,5 +23,8 @@
 - Los endpoins fueron testeados con la ayuda de swagger
 ## Frontend
 - Empece por generar las plantillas de los componentes, servicios y modelos.
-- Declare los modelos de empleado y movimiento.
 - Habilite HttpClient en el app.config.
+- la estructura fue creada en este orden:
+    - Models
+    - Services
+    - 
