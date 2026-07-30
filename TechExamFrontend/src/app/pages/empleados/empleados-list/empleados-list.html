@@ -3,7 +3,7 @@
     <div>
       <h2 id="employees-title">Empleados</h2>
     </div>
-    <button class="btn btn-primary new-employee-button" type="button">
+    <button class="btn btn-primary new-employee-button" type="button" (click)="openCreateModal()">
       <span aria-hidden="true">+</span>
       Nuevo
     </button>
@@ -79,3 +79,7 @@
     </div>
   }
 </article>
+
+@if (isCreateModalOpen()) {
+  <app-empleado-modal (closed)="closeCreateModal()" (saved)="employeeCreated()" />
+}

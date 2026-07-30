@@ -1,0 +1,78 @@
+<div class="modal-backdrop" (click)="closeFromBackdrop($event)">
+  <section
+    class="employee-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="employee-modal-title"
+  >
+    <header class="modal-header">
+      <div>
+        <h2 id="employee-modal-title">Agregar empleado</h2>
+      </div>
+
+      <button
+        class="close-button"
+        type="button"
+        aria-label="Cerrar modal"
+        [disabled]="isSaving()"
+        (click)="close()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </header>
+
+    <form novalidate (submit)="save($event)">
+      <div class="modal-body">
+        <div class="form-field">
+          <label for="employee-id">ID de empleado</label>
+          <input
+            id="employee-id"
+            class="form-control"
+            type="number"
+            min="1"
+            placeholder="Ej. 101"
+            [value]="employeeId()"
+            (input)="updateEmployeeId($event)"
+            autofocus
+          />
+          @if (
+            hasAttemptedSubmit() && (!employeeId() || +employeeId() < 1 || +employeeId() % 1 !== 0)
+          ) {
+            <p class="field-error">Ingresa un ID válido mayor a cero.</p>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="employee-name">Nombre completo</label>
+          <input
+            id="employee-name"
+            class="form-control"
+            type="text"
+            maxlength="100"
+            placeholder="Nombre del empleado"
+            [value]="employeeName()"
+            (input)="updateEmployeeName($event)"
+          />
+          @if (hasAttemptedSubmit() && !employeeName().trim()) {
+            <p class="field-error">El nombre es obligatorio.</p>
+          }
+        </div>
+
+        @if (errorMessage()) {
+          <div class="form-error" role="alert">{{ errorMessage() }}</div>
+        }
+      </div>
+
+      <footer class="modal-footer">
+        <button class="btn save-button" type="submit" [disabled]="isSaving()">
+          @if (isSaving()) {
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            Guardando...
+          } @else {
+            Guardar empleado
+          }
+        </button>
+      </footer>
+    </form>
+  </section>
+</div>
