@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, input, signal } from '@angular/core';
 import { MovimientosService } from '../../../../core/services/movimientosService';
 import { Movimiento } from '../../../models/movimiento.model';
 import { DatePipe } from '@angular/common';
@@ -12,12 +12,16 @@ import { DatePipe } from '@angular/common';
 export class MovimientosList {
   private readonly movimientosService = inject(MovimientosService);
 
+  readonly refreshRevision = input(0);
   readonly movimientos = signal<Movimiento[]>([]);
   readonly isLoading = signal(true);
   readonly errorMessage = signal('');
 
-  ngOnInit() {
-    this.cargarMovimientos();
+  constructor() {
+    effect(() => {
+      this.refreshRevision();
+      this.cargarMovimientos();
+    });
   }
 
   cargarMovimientos() {
@@ -29,10 +33,10 @@ export class MovimientosList {
         this.movimientos.set(movimientos);
         this.isLoading.set(false);
       },
-      error: (error) => {
+      error: () => {
         this.errorMessage.set('Error al cargar los movimientos');
         this.isLoading.set(false);
-      }
+      },
     });
   }
 }

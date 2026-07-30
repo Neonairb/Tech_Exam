@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { EmpleadosList } from '../empleados/empleados-list/empleados-list';
 import { MovimientosList } from '../movimientos/movimientos-list/movimientos-list';
 
@@ -9,5 +9,9 @@ import { MovimientosList } from '../movimientos/movimientos-list/movimientos-lis
   styleUrl: './home.css',
 })
 export class Home {
+  readonly refreshRevision = signal(0);
 
+  refreshLists(): void {
+    this.refreshRevision.update((revision) => revision + 1);
+  }
 }

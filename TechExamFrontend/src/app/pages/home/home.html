@@ -1,4 +1,4 @@
 <section class="home-grid" aria-label="Gestión de empleados">
-  <app-empleados-list />
-  <app-movimientos-list />
+  <app-empleados-list [refreshRevision]="refreshRevision()" (employeeChanged)="refreshLists()" />
+  <app-movimientos-list [refreshRevision]="refreshRevision()" />
 </section>

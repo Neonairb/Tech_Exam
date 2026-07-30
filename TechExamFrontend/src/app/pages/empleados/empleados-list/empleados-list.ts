@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { EmpleadosService } from '../../../../core/services/empleadosService';
 import { Empleado } from '../../../models/empleado.model';
 import { DatePipe } from '@angular/common';
@@ -10,17 +10,22 @@ import { EmpleadoModal } from '../empleado-modal/empleado-modal';
   templateUrl: './empleados-list.html',
   styleUrl: './empleados-list.css',
 })
-export class EmpleadosList implements OnInit {
+export class EmpleadosList {
   private readonly empleadosService = inject(EmpleadosService);
 
+  readonly refreshRevision = input(0);
+  readonly employeeChanged = output<void>();
   readonly empleados = signal<Empleado[]>([]);
   readonly isLoading = signal(true);
   readonly errorMessage = signal('');
   readonly isCreateModalOpen = signal(false);
   readonly employeeToEdit = signal<Empleado | null>(null);
 
-  ngOnInit() {
-    this.cargarEmpleados();
+  constructor() {
+    effect(() => {
+      this.refreshRevision();
+      this.cargarEmpleados();
+    });
   }
 
   cargarEmpleados() {
@@ -49,7 +54,7 @@ export class EmpleadosList implements OnInit {
 
   employeeCreated(): void {
     this.closeCreateModal();
-    this.cargarEmpleados();
+    this.employeeChanged.emit();
   }
 
   openEditModal(employee: Empleado): void {
@@ -62,6 +67,6 @@ export class EmpleadosList implements OnInit {
 
   employeeUpdated(): void {
     this.closeEditModal();
-    this.cargarEmpleados();
+    this.employeeChanged.emit();
   }
 }
