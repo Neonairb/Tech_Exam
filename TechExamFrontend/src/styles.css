@@ -1,1 +1,50 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --app-bg: #0b0d10;
+  --app-surface: #14171c;
+  --app-surface-hover: #1b2027;
+  --app-border: #2a3038;
+  --app-text: #f5f7fa;
+  --app-text-muted: #9ca3af;
+  --app-accent: #6ea8fe;
+  --app-accent-hover: #8bb9fe;
+  --app-radius: 0.75rem;
+  --app-transition: 160ms ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background-color: var(--app-bg);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--app-bg);
+  color: var(--app-text);
+  font-family:
+    Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--app-accent);
+  transition: color var(--app-transition);
+}
+
+a:hover {
+  color: var(--app-accent-hover);
+}
+
+::selection {
+  background-color: var(--app-accent);
+  color: #07111f;
+}
+
+:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 3px;
+}

@@ -1,13 +1,15 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: #f4f6f8;
+  background: var(--app-bg);
+  color: var(--app-text);
 }
 
 .header {
   padding: 1.5rem 2rem;
-  background: #1f2937;
-  color: white;
+  background: var(--app-surface);
+  color: var(--app-text);
+  border-bottom: 1px solid var(--app-border);
 }
 
 .header h1,
@@ -17,7 +19,7 @@
 
 .header p {
   margin-top: 0.25rem;
-  color: #d1d5db;
+  color: var(--app-text-muted);
 }
 
 .navigation {
@@ -25,18 +27,23 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem 2rem;
-  background: white;
-  border-bottom: 1px solid #d1d5db;
+  background: var(--app-surface);
+  border-bottom: 1px solid var(--app-border);
 }
 
 .navigation a {
-  color: #374151;
+  color: var(--app-text-muted);
   text-decoration: none;
   font-weight: 600;
+  transition: color var(--app-transition);
+}
+
+.navigation a:hover {
+  color: var(--app-text);
 }
 
 .navigation a.active {
-  color: #2563eb;
+  color: var(--app-accent);
 }
 
 .navigation button {
