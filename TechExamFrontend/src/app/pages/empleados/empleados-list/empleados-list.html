@@ -1,11 +1,33 @@
-<h2>Empleados</h2>
-
-@if (isLoading) {
-  <p>Cargando empleados...</p>
-}
-
-@if (errorMessage) {
-  <p>{{ errorMessage }}</p>
-}
-
-<pre>{{ empleados | json }}</pre>
+<div class="empleados-list">
+  <h2>Empleados</h2>
+  @if (isLoading()) {
+    <p>Cargando empleados...</p>
+  } @else if (errorMessage()) {
+    <p>{{ errorMessage() }}</p>
+  } @else {
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Activo</th>
+          <th>Fecha de alta</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (empleado of empleados(); track empleado.idEmpleado) {
+          <tr>
+            <td>{{ empleado.idEmpleado }}</td>
+            <td>{{ empleado.nombre }}</td>
+            <td>{{ empleado.activo }}</td>
+            <td>{{ empleado.fechaAlta | date: 'dd/MM/yyyy' }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5">No hay empleados disponibles.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
