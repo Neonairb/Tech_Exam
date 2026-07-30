@@ -144,6 +144,10 @@ export class EmpleadosList {
   }
 
   openEditModal(employee: Empleado): void {
+    if (!employee.activo) {
+      return;
+    }
+
     this.employeeToEdit.set(employee);
   }
 

@@ -120,8 +120,20 @@ export class EmpleadoModal {
           this.errorMessage.set(
             this.idErrorMessage() || this.nameErrorMessage() ? '' : message,
           );
-        } else if (error instanceof HttpErrorResponse && error.status === 409 && !isEditing) {
-          this.idErrorMessage.set(message);
+        } else if (error instanceof HttpErrorResponse && error.status === 409) {
+          if (!isEditing) {
+            this.idErrorMessage.set(message);
+          } else {
+            void Swal.fire({
+              icon: 'warning',
+              title: 'Empleado inactivo',
+              text: message,
+              confirmButtonText: 'Entendido',
+              background: 'var(--app-surface)',
+              color: 'var(--app-text)',
+              confirmButtonColor: 'var(--app-accent)',
+            });
+          }
         } else {
           void Swal.fire({
             icon: 'error',

@@ -128,6 +128,13 @@ namespace TechExamBackend.Controllers
                     mensaje = exception.Message
                 });
             }
+            catch (SqlException exception) when (exception.Number == 50006)
+            {
+                return Conflict(new
+                {
+                    mensaje = exception.Message
+                });
+            }
         }
 
         [HttpDelete("{idEmpleado:int}")]

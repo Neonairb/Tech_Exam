@@ -90,7 +90,8 @@
                   <button
                     class="btn action-button"
                     type="button"
-                    aria-label="Editar empleado"
+                    [hidden]="!empleado.activo"
+                    [attr.aria-label]="'Editar a ' + empleado.nombre"
                     title="Editar"
                     (click)="openEditModal(empleado)"
                   >
