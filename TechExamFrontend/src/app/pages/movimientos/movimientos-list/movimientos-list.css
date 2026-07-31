@@ -142,7 +142,8 @@
 }
 
 .empty-table {
-  padding-block: 2.5rem !important;
+  height: 60px;
+  padding-block: 0.85rem !important;
   text-align: center;
   white-space: normal !important;
 }
