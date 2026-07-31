@@ -263,8 +263,15 @@ CREATE OR ALTER PROCEDURE sp_Movimientos_ObtenerPorId
 AS
 BEGIN
     SET NOCOUNT ON;
-    SELECT * FROM Movimientos AS m
+    SELECT m.IdMovimiento,
+            m.IdEmpleado,
+            e.Nombre, 
+            m.TipoMovimiento,
+            m.FechaMovimiento
+    FROM Movimientos AS m
+    INNER JOIN Empleados AS e ON m.IdEmpleado = e.IdEmpleado
     WHERE m.IdMovimiento = @IdMovimiento;
+
 END;
 GO
 
