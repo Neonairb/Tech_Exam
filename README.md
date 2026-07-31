@@ -130,6 +130,80 @@ La semilla:
 
 Uno de los empleados inactivos está diseñado para probar el procedimiento de depuración. Si se ejecuta `sp_DepuracionEmpleados`, ese registro puede ser eliminado.
 
+## Estructura de la base de datos
+
+La base de datos se llama `EXAMEN` y contiene dos tablas relacionadas.
+
+### Tabla `Empleados`
+
+Almacena la información principal y el estado de cada empleado.
+
+| Columna | Tipo | Restricciones y valor predeterminado | Descripción |
+|---|---|---|---|
+| `IdEmpleado` | `INT` | Llave primaria | Identificador único del empleado |
+| `Nombre` | `NVARCHAR(20)` | `NOT NULL` | Nombre del empleado |
+| `Activo` | `BIT` | `NOT NULL`, predeterminado `1` | Indica si el empleado está activo |
+| `FechaAlta` | `DATETIME2` | Predeterminado `SYSDATETIME()` | Fecha de creación del empleado |
+| `FechaModificacion` | `DATETIME2` | Permite `NULL` | Fecha del último cambio o baja |
+
+### Tabla `Movimientos`
+
+Registra el historial de altas, cambios y bajas.
+
+| Columna | Tipo | Restricciones y valor predeterminado | Descripción |
+|---|---|---|---|
+| `IdMovimiento` | `INT` | Llave primaria, `IDENTITY(1,1)` | Identificador consecutivo del movimiento |
+| `IdEmpleado` | `INT` | `NOT NULL`, llave foránea | Empleado asociado al movimiento |
+| `TipoMovimiento` | `NVARCHAR(20)` | `NOT NULL`, valores `Alta`, `Cambio` o `Baja` | Tipo de operación registrada |
+| `FechaMovimiento` | `DATETIME2` | Predeterminado `SYSDATETIME()` | Fecha y hora del movimiento |
+
+### Relación y restricciones
+
+- `Empleados` tiene una relación de uno a muchos con `Movimientos`.
+- `FK_Movimientos_Empleados` relaciona `Movimientos.IdEmpleado` con `Empleados.IdEmpleado`.
+- `CK_Tipo_Movimiento` limita el tipo de movimiento a `Alta`, `Cambio` o `Baja`.
+- La llave foránea no utiliza eliminación en cascada. La depuración elimina primero los movimientos y después el empleado.
+
+```text
+Empleados (1) ──────────< (N) Movimientos
+ IdEmpleado PK                IdMovimiento PK
+                              IdEmpleado FK
+```
+
+## Stored procedures
+
+Los procedimientos se crean con `CREATE OR ALTER` mediante `database/03-create-stored-procedures.sql`.
+
+### Procedimientos de empleados
+
+| Procedimiento | Parámetros | Función |
+|---|---|---|
+| `sp_Empleados_ObtenerTodos` | `@PageNumber = 1`, `@PageSize = 10`, `@Query = NULL` | Devuelve empleados paginados y un segundo resultado con el total de registros, activos e inactivos. Permite buscar por nombre o identificador. |
+| `sp_Empleados_ObtenerPorId` | `@IdEmpleado` | Devuelve el empleado que coincide con el identificador. |
+| `sp_Empleados_Crear` | `@IdEmpleado`, `@Nombre` | Crea un empleado activo y registra un movimiento de tipo `Alta` dentro de la misma transacción. |
+| `sp_Empleados_Actualizar` | `@IdEmpleado`, `@Nombre` | Actualiza el nombre y la fecha de modificación de un empleado activo, y registra un movimiento `Cambio`. |
+| `sp_Empleados_DarDeBaja` | `@IdEmpleado` | Realiza la baja lógica, actualiza la fecha de modificación y registra un movimiento `Baja`. |
+
+Los procedimientos de creación, actualización y baja usan transacciones con `XACT_ABORT`. Si una validación o escritura falla, todos los cambios de la operación se revierten.
+
+### Procedimientos de movimientos
+
+| Procedimiento | Parámetros | Función |
+|---|---|---|
+| `sp_Movimientos_ObtenerTodos` | `@PageNumber = 1`, `@PageSize = 10` | Devuelve todos los movimientos paginados, incluyendo el nombre del empleado, y un segundo resultado con el total de registros. |
+| `sp_Movimientos_ObtenerPorId` | `@IdMovimiento` | Devuelve el movimiento que coincide con el identificador. |
+| `sp_Movimientos_ObtenerPorEmpleado` | `@IdEmpleado`, `@PageNumber = 1`, `@PageSize = 10` | Devuelve el historial paginado de un empleado y un segundo resultado con el total de movimientos de ese empleado. |
+
+Los listados se ordenan por la fecha del movimiento de forma descendente. En todos los procedimientos paginados, el número de página debe ser mayor que cero y el tamaño debe estar entre 1 y 100.
+
+### Procedimiento de depuración
+
+| Procedimiento | Parámetros | Función |
+|---|---|---|
+| `sp_DepuracionEmpleados` | Ninguno | Elimina empleados inactivos cuyo último movimiento ocurrió hace más de tres meses. Primero elimina su historial para respetar la llave foránea y después elimina los empleados, todo dentro de una transacción. |
+
+El script opcional `database/04-create-server-agent-job.sql` crea el trabajo `DepuracionEmpleados` de SQL Server Agent. El trabajo ejecuta `sp_DepuracionEmpleados` todos los días a las `05:00`.
+
 ## Configuración del backend
 
 La cadena de conexión se encuentra en:
